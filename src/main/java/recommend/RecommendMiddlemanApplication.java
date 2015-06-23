@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import recommend.config.CoreConfig;
 import recommend.mapper.TestMapper;
+import recommend.service.Loader;
 import recommend.service.api.ITestService;
 
 
@@ -44,6 +45,8 @@ public class RecommendMiddlemanApplication {
         ITestService test = (ITestService)ctx.getBean("testConsumer");
         System.out.println(test.getName());
 
+        Loader loader = ctx.getBean(Loader.class);
+        System.out.println(loader.getRecUser(175553l));
 
 
     }
