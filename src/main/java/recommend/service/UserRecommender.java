@@ -78,8 +78,8 @@ public class UserRecommender implements IUserRecommender{
     {
         List<String> recUser = loader.getRecUserFromStorage(uid);
 
-        List<String> filtratedRec = recUser;
-        /*
+        //List<String> filtratedRec = recUser;
+
         //过滤推荐用户
         List<String> filtratedRec = new ArrayList<>();
         for(String recUid: recUser)
@@ -87,7 +87,7 @@ public class UserRecommender implements IUserRecommender{
             if(userService.getUserCardsCount(Long.parseLong(recUid)) >= MAX_CARD_COUNT)
                 filtratedRec.add(recUid);
         }
-        */
+
         return loadRandomFromList(filtratedRec, maxSie);
     }
 
