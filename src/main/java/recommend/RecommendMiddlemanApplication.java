@@ -1,53 +1,41 @@
 package recommend;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.redisson.Redisson;
+import org.redisson.core.RTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import recommend.config.CoreConfig;
-import recommend.mapper.TestMapper;
-import recommend.service.Loader;
-import recommend.service.api.ITestService;
+import recommend.redisson.UpdateRecMessageListener;
 
 
 import java.util.Arrays;
 
+
+
+
 @SpringBootApplication
 public class RecommendMiddlemanApplication {
+    private static Logger log = LoggerFactory.getLogger(RecommendMiddlemanApplication.class);
 
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(RecommendMiddlemanApplication.class, args);
-        System.out.println("Let's inspect the beans provided by Spring Boot:");
 
+        ApplicationContext ctx = SpringApplication.run(RecommendMiddlemanApplication.class, args);
+
+        log.info("Let's inspect the beans provided by Spring Boot:");
         String[] beanNames = ctx.getBeanDefinitionNames();
         Arrays.sort(beanNames);
         for (String beanName : beanNames) {
-            System.out.println(beanName);
+            log.info(beanName);
         }
 
-
-        //test data base
-        TestMapper testMapper = ctx.getBean(TestMapper.class);
-
-        System.out.println(testMapper.getUser());
-
-
-        //test redis
-        StringRedisTemplate stringRedisTemplate = (StringRedisTemplate)ctx.getBean("stringRedisTemplate");
-
-        stringRedisTemplate.opsForValue().set("test", "odb set");
-
-        System.out.println(stringRedisTemplate.opsForValue().get("test"));
-
-        //test dubbo
-        ITestService test = (ITestService)ctx.getBean("testConsumer");
-        System.out.println(test.getName());
-
-        Loader loader = ctx.getBean(Loader.class);
-        System.out.println(loader.getRecUser(175553l));
-
-
+        //监听索引更新
+        Redisson redisson = ctx.getBean(Redisson.class);
+        UpdateRecMessageListener listener = ctx.getBean(UpdateRecMessageListener.class);
+        RTopic<String> topic =redisson.getTopic("recommendation");
+        topic.addListener(listener);
+        log.info("recommend middleman start!");
     }
 }
