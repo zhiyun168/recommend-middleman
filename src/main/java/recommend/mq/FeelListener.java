@@ -47,7 +47,10 @@ public class FeelListener implements MessageListenerConcurrently {
                     if(hasLoad)
                         loader.deleteRecUser(follower, leader);
                     else
+                    {
                         loader.addFollowedRecUser(follower, leader);
+                    }
+
                 }
             }
             catch (Exception e)

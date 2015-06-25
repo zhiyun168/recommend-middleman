@@ -19,7 +19,7 @@ public class StringCodecExt extends StringCodec{
         catch (Exception e)
         {
             //do nothing
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
         return super.decodeValue(bytes);
     }

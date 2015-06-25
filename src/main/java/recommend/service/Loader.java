@@ -73,8 +73,10 @@ public class Loader {
 
         if(isLock)
         {
+
             //获取加载锁，从es加载进redis
             try {
+                log.info("start to load:" + uid.toString());
                 List<String> rec = getRecUserFromStorage(uid);
 
                 //List<String> filtratedRec =rec;
@@ -202,6 +204,7 @@ public class Loader {
             {
                 recUser.remove(delId);
             }
+            followed.delete();
         }
     }
 
