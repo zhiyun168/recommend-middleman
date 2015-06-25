@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import recommend.redisson.UpdateRecMessageListener;
+import recommend.service.api.IUserRecommender;
 
 
 import java.util.Arrays;
@@ -30,6 +31,12 @@ public class RecommendMiddlemanApplication {
         for (String beanName : beanNames) {
             log.info(beanName);
         }
+
+
+        /*
+        IUserRecommender rec = (IUserRecommender)ctx.getBean("rec");
+        System.out.println(rec.getRandomCandidates(1082l,3));
+        */
 
         //监听索引更新
         Redisson redisson = ctx.getBean(Redisson.class);
