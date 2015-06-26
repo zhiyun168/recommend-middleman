@@ -76,7 +76,7 @@ public class Loader {
 
             //获取加载锁，从es加载进redis
             try {
-                log.info("start to load:" + uid.toString());
+                //log.info("start to load:" + uid.toString());
                 List<String> rec = getRecUserFromStorage(uid);
 
                 //List<String> filtratedRec =rec;
