@@ -14,12 +14,16 @@ public class StringCodecExt extends StringCodec{
     @Override
     public Object decodeValue(ByteBuffer bytes) {
         try {
-            return  jacksonCodec.decodeValue(bytes);
+            Object value =   jacksonCodec.decodeValue(bytes);
+            if (value instanceof Number)
+                return value.toString();
+            else
+                return value;
         }
         catch (Exception e)
         {
             //do nothing
-            //System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
         return super.decodeValue(bytes);
     }
