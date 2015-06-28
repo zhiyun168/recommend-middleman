@@ -31,7 +31,7 @@ public class RedisConfig {
     {
         Config config = new Config();
 
-        config.setCodec(new StringCodecExt());
+        //config.setCodec(new StringCodecExt());
         log.info("redis address:" + address);
         if(enableCluster == null || enableCluster.equals("0"))
         {

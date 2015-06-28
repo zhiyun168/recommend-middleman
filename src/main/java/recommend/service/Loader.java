@@ -94,8 +94,12 @@ public class Loader {
                 RList<String> recUser = redisson.getList(recUserKey);
 
                 recUser.clear();
-                recUser.addAll(filtratedRec);
-                recUser.expire(TIMEOUT, TimeUnit.DAYS);
+                if(!recUser.isEmpty())
+                {
+                    recUser.addAll(filtratedRec);
+                    recUser.expire(TIMEOUT, TimeUnit.DAYS);
+                }
+
 
                 RMap<String, String> loadMap = redisson.getMap(CacheKeyHelper.REC_LOAD_KEY);
                 loadMap.put(uid.toString(), loadTime);
