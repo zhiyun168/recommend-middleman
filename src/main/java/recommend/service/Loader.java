@@ -94,7 +94,7 @@ public class Loader {
                 RList<String> recUser = redisson.getList(recUserKey);
 
                 recUser.clear();
-                if(!recUser.isEmpty())
+                if(!filtratedRec.isEmpty())
                 {
                     recUser.addAll(filtratedRec);
                     recUser.expire(TIMEOUT, TimeUnit.DAYS);
