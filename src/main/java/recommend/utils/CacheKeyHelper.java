@@ -42,6 +42,11 @@ public class CacheKeyHelper {
         return StringHelper.DotJoiner.join(REC_USER_FOLLOWED_PREFIX, uid);
     }
 
+    public static String recLoadDelLockKey()
+    {
+        return StringHelper.DotJoiner.join(REC_LOAD_KEY, "lock");
+    }
+
 
     /**
      * memcached key section

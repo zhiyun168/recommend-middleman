@@ -39,15 +39,21 @@ public class FeelListener implements MessageListenerConcurrently {
                 Long follower = (Long) followInfo.get("follower");
                 if(loader.hasLoadToCache(follower))
                 {
+                    log.info("del rec user 1-follower:{},leader:{}",follower,leader);
                     loader.deleteRecUser(follower, leader);
                 }
                 else
                 {
                     boolean hasLoad = loader.loadToCache(follower);
                     if(hasLoad)
+                    {
+                        log.info("del rec user 2-follower:{},leader:{}",follower,leader);
                         loader.deleteRecUser(follower, leader);
+                    }
+
                     else
                     {
+                        log.info("add followed user 2-follower:{},leader:{}",follower,leader);
                         loader.addFollowedRecUser(follower, leader);
                     }
 

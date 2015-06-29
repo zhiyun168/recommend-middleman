@@ -33,16 +33,20 @@ public class RecommendMiddlemanApplication {
         }
 
 
-        /*
-        IUserRecommender rec = (IUserRecommender)ctx.getBean("rec");
-        System.out.println(rec.getRandomCandidates(1082l,3));
-        */
 
+        //IUserRecommender rec = (IUserRecommender)ctx.getBean("rec");
+        //System.out.println(rec.getRandomCandidates(1082l,3));
+        //System.out.println(rec.getRandomCandidates(1082l,3));
+
+
+        /*
         //监听索引更新
         Redisson redisson = ctx.getBean(Redisson.class);
         UpdateRecMessageListener listener = ctx.getBean(UpdateRecMessageListener.class);
         RTopic<String> topic =redisson.getTopic("recommendation");
         topic.addListener(listener);
+        */
+
         log.info("recommend middleman start!");
     }
 }
