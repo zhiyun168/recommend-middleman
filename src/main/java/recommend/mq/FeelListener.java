@@ -53,7 +53,7 @@ public class FeelListener implements MessageListenerConcurrently {
 
                     else
                     {
-                        log.info("add followed user 2-follower:{},leader:{}",follower,leader);
+                        //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
                         loader.addFollowedRecUser(follower, leader);
                     }
 

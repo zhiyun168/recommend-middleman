@@ -65,12 +65,12 @@ public class Loader2 {
 
             //获取加载锁，从es加载进redis
             try {
-                log.info("start to load:" + uid.toString());
+                //log.info("start to load:" + uid.toString());
                 List<String> rec = getRecUserFromStorage(uid);
 
-                List<String> filtratedRec =rec;
+                //List<String> filtratedRec =rec;
 
-                /*
+
                 //过滤推荐用户
                 List<String> filtratedRec = new ArrayList<>();
                 for(String recUid: rec)
@@ -78,7 +78,7 @@ public class Loader2 {
                     if(userService.getUserCardsCount(Long.parseLong(recUid)) >= MAX_CARD_COUNT)
                         filtratedRec.add(recUid);
                 }
-                */
+
 
                 if(!filtratedRec.isEmpty())
                 {
