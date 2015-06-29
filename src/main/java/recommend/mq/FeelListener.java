@@ -4,14 +4,11 @@ import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.common.message.MessageExt;
-import org.redisson.Redisson;
-import org.redisson.core.RList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import recommend.service.Loader;
-import recommend.utils.CacheKeyHelper;
+import recommend.service.Loader2;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -27,7 +24,7 @@ public class FeelListener implements MessageListenerConcurrently {
     private static Logger log = LoggerFactory.getLogger(FeelListener.class);
 
     @Autowired
-    private Loader loader;
+    private Loader2 loader2;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -37,24 +34,24 @@ public class FeelListener implements MessageListenerConcurrently {
                 Map followInfo = (Map) ObjectUtil.byteToObject(body);
                 Long leader = (Long) followInfo.get("leader");
                 Long follower = (Long) followInfo.get("follower");
-                if(loader.hasLoadToCache(follower))
+                if(loader2.hasLoadToCache(follower))
                 {
                     //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-                    loader.deleteRecUser(follower, leader);
+                    loader2.deleteRecUser(follower, leader);
                 }
                 else
                 {
-                    boolean hasLoad = loader.loadToCache(follower);
+                    boolean hasLoad = loader2.loadToCache(follower);
                     if(hasLoad)
                     {
                         //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                        loader.deleteRecUser(follower, leader);
+                        loader2.deleteRecUser(follower, leader);
                     }
 
                     else
                     {
                         //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
-                        loader.addFollowedRecUser(follower, leader);
+                        loader2.addFollowedRecUser(follower, leader);
                     }
 
                 }
