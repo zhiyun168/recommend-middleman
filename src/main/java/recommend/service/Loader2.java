@@ -75,7 +75,9 @@ public class Loader2 {
                 List<String> filtratedRec = new ArrayList<>();
                 for(String recUid: rec)
                 {
-                    if(userService.getUserCardsCount(Long.parseLong(recUid)) >= MAX_CARD_COUNT)
+                    Long rec_id = Long.parseLong(recUid);
+                    Long cardCount = userService.getUserCardsCount(rec_id);
+                    if(cardCount!=null && cardCount >= MAX_CARD_COUNT)
                         filtratedRec.add(recUid);
                 }
 
