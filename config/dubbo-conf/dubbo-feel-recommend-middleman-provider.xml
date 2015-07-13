@@ -21,6 +21,7 @@
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
  <dubbo:service timeout="3000" retries="0" interface="recommend.service.api.IUserRecommender" ref="userRecommender2" />
+ 
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IGoalRecommender" ref="goalRecommender" />
 
 </beans>
