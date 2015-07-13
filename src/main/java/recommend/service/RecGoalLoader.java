@@ -31,8 +31,8 @@ public class RecGoalLoader {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    @Autowired
-    private IGoalService goalService;
+    //@Autowired
+    //private IGoalService goalService;
     @Autowired
     private SearchClientService searchClientService;
 
