@@ -134,7 +134,13 @@ public class Loader2 {
         SearchHits hits = response.getHits();
         SearchHit[] hitList = hits.getHits();
         if(hitList.length > 0)
-            return (List<String>)hitList[0].getSource().get("candidates");
+        {
+            Object res = hitList[0].getSource().get("candidates");
+            if(res == null)
+                return Collections.EMPTY_LIST;
+            else
+                return (List<String>)res;
+        }
         else
             return Collections.EMPTY_LIST;
     }
