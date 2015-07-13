@@ -17,6 +17,7 @@ import recommend.redis.RedisTemplatePlus;
 import recommend.utils.CacheKeyHelper;
 import recommend.utils.StringHelper;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,8 +32,8 @@ public class RecGoalLoader {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    //@Autowired
-    //private IGoalService goalService;
+    @Autowired
+    private IGoalService goalService;
     @Autowired
     private SearchClientService searchClientService;
 
@@ -119,8 +120,8 @@ public class RecGoalLoader {
 
     public List<String> filter(List<String> rec, Long uid)
     {
-        return  rec;
-        /*
+        //return  rec;
+
         //过滤推荐任务
         List<String> filtratedRec = new ArrayList<>();
         for(String recId: rec)
@@ -131,7 +132,7 @@ public class RecGoalLoader {
                 filtratedRec.add(recId);
         }
         return  filtratedRec;
-        */
+
     }
 
 
