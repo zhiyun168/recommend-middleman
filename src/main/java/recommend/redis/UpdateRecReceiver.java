@@ -20,17 +20,24 @@ public class UpdateRecReceiver {
 
     public void receiveMessage(String msg) {
         log.info("Received <" + msg + ">");
-        String lockKey = CacheKeyHelper.recLoadDelLockKey();
+        String lockKey = CacheKeyHelper.recLoadDelLockKey(msg);
         boolean isLock = RedisTemplatePlus.set(stringRedisTemplate,
                 lockKey, "", "NX", "EX", 60);
         if(isLock)
         {
             try {
-                stringRedisTemplate.delete(CacheKeyHelper.REC_LOAD_KEY);
+                if("ALSO_FOLLOWING".equals(msg))
+                    updateAlsoFollowing();
+                else if("GENDER_GOAL".equals(msg))
+                    updateGenderGoal();
+                else
+                {
+                    log.warn("未知更新消息："+msg);
+                }
             }
             catch (Exception e)
             {
-                log.error("删除推荐缓存失败:"+CacheKeyHelper.REC_LOAD_KEY, e);
+                log.error("删除推荐缓存失败:"+msg, e);
             }
             finally {
                 stringRedisTemplate.delete(lockKey);
@@ -38,4 +45,15 @@ public class UpdateRecReceiver {
         }
         log.info("end");
     }
+
+    private void updateAlsoFollowing()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_LOAD_KEY);
+    }
+
+    private void updateGenderGoal()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_GOAL_LOAD_KEY);
+    }
+
 }

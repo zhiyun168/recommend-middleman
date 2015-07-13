@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import recommend.service.Loader2;
+import recommend.service.RecGoalLoader;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -25,35 +26,22 @@ public class FeelListener implements MessageListenerConcurrently {
 
     @Autowired
     private Loader2 loader2;
+    @Autowired
+    private RecGoalLoader recGoalLoader;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
         for(MessageExt msg : msgs){
-            byte[] body = msg.getBody();
+
             try{
-                Map followInfo = (Map) ObjectUtil.byteToObject(body);
-                Long leader = (Long) followInfo.get("leader");
-                Long follower = (Long) followInfo.get("follower");
-                if(loader2.hasLoadToCache(follower))
-                {
-                    //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-                    loader2.deleteRecUser(follower, leader);
-                }
+                String tag = msg.getTags();
+                if("addFollow".equals(tag))
+                    handleAddFollow(msg);
+                else if ("join".equals(tag))
+                    handleJoinGoal(msg);
                 else
                 {
-                    boolean hasLoad = loader2.loadToCache(follower);
-                    if(hasLoad)
-                    {
-                        //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                        loader2.deleteRecUser(follower, leader);
-                    }
-
-                    else
-                    {
-                        //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
-                        loader2.addFollowedRecUser(follower, leader);
-                    }
-
+                    log.warn("未知消息："+ msg.toString());
                 }
             }
             catch (Exception e)
@@ -63,6 +51,60 @@ public class FeelListener implements MessageListenerConcurrently {
             }
         }
         return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+    }
+
+
+    private void handleAddFollow(MessageExt msg)
+    {
+        byte[] body = msg.getBody();
+        Map followInfo = (Map) ObjectUtil.byteToObject(body);
+        Long leader = (Long) followInfo.get("leader");
+        Long follower = (Long) followInfo.get("follower");
+        if(loader2.hasLoadToCache(follower))
+        {
+            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
+            loader2.deleteRecUser(follower, leader);
+        }
+        else
+        {
+            boolean hasLoad = loader2.loadToCache(follower);
+            if(hasLoad)
+            {
+                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
+                loader2.deleteRecUser(follower, leader);
+            }
+
+            else
+            {
+                //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
+                loader2.addFollowedRecUser(follower, leader);
+            }
+
+        }
+    }
+
+    private void handleJoinGoal(MessageExt msg)
+    {
+        String[] gid_uid = msg.getKeys().split(":");
+
+        Long uid = Long.valueOf(gid_uid[1]);
+        Long gid = Long.valueOf(gid_uid[0]);
+
+        if(recGoalLoader.hasLoadToCache(uid))
+        {
+            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
+            recGoalLoader.deleteCandidates(uid,gid);
+        }
+        else
+        {
+
+            boolean hasLoad = recGoalLoader.loadToCache(uid);
+            if(hasLoad)//
+            {
+                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
+                recGoalLoader.deleteCandidates(uid,gid);
+            }
+        }
     }
 
 }

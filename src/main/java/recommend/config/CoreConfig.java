@@ -25,8 +25,8 @@ import recommend.mq.FeelListener;
 public class CoreConfig {
     private static Logger log = LoggerFactory.getLogger(CoreConfig.class);
 
-    private static final String MQ_TOPIC = "Follow";
-    private static final String MQ_TAG = "addFollow";
+    private static final String MQ_TOPIC_FOLLOW = "Follow";
+    private static final String MQ_TAG_ADD_FOLLOW = "addFollow";
 
 
     @Value("${mq.consumer_group}")
@@ -48,7 +48,8 @@ public class CoreConfig {
 
         consumer.setNamesrvAddr(nameServerAddr);
 
-        consumer.subscribe(MQ_TOPIC, MQ_TAG);
+        consumer.subscribe("Follow", "addFollow");
+        consumer.subscribe("Goal", "join");
 
         /**
          * 设置Consumer第一次启动是从队列头部开始消费还是队列尾部开始消费<br>

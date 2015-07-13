@@ -1,10 +1,12 @@
 package recommend;
 
+import com.zhiyun168.service.api.goal.IGoalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import recommend.service.GoalRecommender;
 import recommend.service.api.IUserRecommender;
 
 
@@ -34,6 +36,14 @@ public class RecommendMiddlemanApplication {
         //IUserRecommender rec = (IUserRecommender)ctx.getBean("rec");
         //System.out.println(rec.getRandomCandidates(1082l,3));
         //System.out.println(rec.getRandomCandidates(1082l,3));
+
+        //GoalRecommender goalRecommender = ctx.getBean(GoalRecommender.class);
+        //System.out.println(goalRecommender.getCandidates(1082l,3));
+        //System.out.println(goalRecommender.getCandidates(1082l,3));
+
+        //IGoalService goalService = ctx.getBean(IGoalService.class);
+
+        //System.out.println(goalService.isJoinGoal(13l,10l));
 
 
         /*
