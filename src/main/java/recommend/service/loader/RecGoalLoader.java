@@ -1,4 +1,4 @@
-package recommend.service;
+package recommend.service.loader;
 
 import com.google.common.base.Preconditions;
 import com.zhiyun168.service.api.goal.IGoalService;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.redis.RedisTemplatePlus;
+import recommend.service.SearchClientService;
 import recommend.utils.CacheKeyHelper;
 import recommend.utils.StringHelper;
 

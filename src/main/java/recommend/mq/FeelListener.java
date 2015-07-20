@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import recommend.service.Loader2;
-import recommend.service.RecGoalLoader;
+import recommend.service.loader.RecUserLoader;
+import recommend.service.loader.RecGoalLoader;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class FeelListener implements MessageListenerConcurrently {
     private static Logger log = LoggerFactory.getLogger(FeelListener.class);
 
     @Autowired
-    private Loader2 loader2;
+    private RecUserLoader recUserLoader;
     @Autowired
     private RecGoalLoader recGoalLoader;
 
@@ -60,24 +60,24 @@ public class FeelListener implements MessageListenerConcurrently {
         Map followInfo = (Map) ObjectUtil.byteToObject(body);
         Long leader = (Long) followInfo.get("leader");
         Long follower = (Long) followInfo.get("follower");
-        if(loader2.hasLoadToCache(follower))
+        if(recUserLoader.hasLoadToCache(follower))
         {
             //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-            loader2.deleteRecUser(follower, leader);
+            recUserLoader.deleteRecUser(follower, leader);
         }
         else
         {
-            boolean hasLoad = loader2.loadToCache(follower);
+            boolean hasLoad = recUserLoader.loadToCache(follower);
             if(hasLoad)
             {
                 //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                loader2.deleteRecUser(follower, leader);
+                recUserLoader.deleteRecUser(follower, leader);
             }
 
             else
             {
                 //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
-                loader2.addFollowedRecUser(follower, leader);
+                recUserLoader.addFollowedRecUser(follower, leader);
             }
 
         }

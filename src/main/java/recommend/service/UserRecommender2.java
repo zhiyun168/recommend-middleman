@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.service.api.IUserRecommender;
+import recommend.service.loader.RecUserLoader;
 import recommend.utils.CacheKeyHelper;
 
 import java.util.*;
@@ -21,7 +22,7 @@ public class UserRecommender2 implements IUserRecommender{
     private static Logger log = LoggerFactory.getLogger(UserRecommender2.class);
 
     @Autowired
-    private Loader2 loader2;
+    private RecUserLoader recUserLoader;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -35,13 +36,13 @@ public class UserRecommender2 implements IUserRecommender{
 
     @Override
     public List<String> getRandomCandidates(Long uid, int maxSize) {
-        if(loader2.hasLoadToCache(uid))
+        if(recUserLoader.hasLoadToCache(uid))
         {
             return loadRandomFromCache(uid, maxSize);
         }
         else
         {
-            boolean hasLoad = loader2.loadToCache(uid);
+            boolean hasLoad = recUserLoader.loadToCache(uid);
             if(hasLoad)
             {
                 //cache里读
@@ -69,7 +70,7 @@ public class UserRecommender2 implements IUserRecommender{
 
     private List<String> loadRandomFromStorage(Long uid, int maxSie)
     {
-        List<String> recUser = loader2.getRecUserFromStorage(uid);
+        List<String> recUser = recUserLoader.getRecUserFromStorage(uid);
 
         //List<String> filtratedRec = recUser;
 

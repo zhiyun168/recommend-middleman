@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import recommend.service.loader.RecGoalLoader;
 import recommend.utils.CacheKeyHelper;
 
 import java.util.Collections;

@@ -27,9 +27,16 @@ public class UpdateRecReceiver {
         {
             try {
                 if("ALSO_FOLLOWING".equals(msg))
+                {
                     updateAlsoFollowing();
-                else if("GENDER_GOAL".equals(msg))
+                }
+                else if("GENDER_GOAL".equals(msg)) {
                     updateGenderGoal();
+                }
+                else if("FOLLOWING_USER_LIKED_CARDS".equals(msg))
+                {
+                    updateFollowingUserLikedCards();
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);
@@ -54,6 +61,11 @@ public class UpdateRecReceiver {
     private void updateGenderGoal()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_GOAL_LOAD_KEY);
+    }
+
+    private void updateFollowingUserLikedCards()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_CARD_LOAD_KEY);
     }
 
 }

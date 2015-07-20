@@ -1,4 +1,4 @@
-package recommend.service;
+package recommend.service.loader;
 
 import com.google.common.base.Preconditions;
 import com.zhiyun168.service.api.IUserService;
@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.redis.RedisTemplatePlus;
+import recommend.service.SearchClientService;
 import recommend.utils.CacheKeyHelper;
 import recommend.utils.StringHelper;
 
@@ -28,8 +29,8 @@ import java.util.concurrent.TimeUnit;
  * Created by ouduobiao on 15/6/23.
  */
 @Service
-public class Loader2 {
-    private static Logger log = LoggerFactory.getLogger(Loader2.class);
+public class RecUserLoader {
+    private static Logger log = LoggerFactory.getLogger(RecUserLoader.class);
 
     @Autowired
     private SearchClientService searchClientService;
