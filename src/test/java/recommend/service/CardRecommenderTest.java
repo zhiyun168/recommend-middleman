@@ -33,7 +33,7 @@ public class CardRecommenderTest {
     }
 
 
-    @Test
+    //@Test
     public void loadFromCacheTest()
     {
         Long uid = 1082l;
@@ -45,7 +45,7 @@ public class CardRecommenderTest {
     }
 
 
-    //@Test
+    @Test
     public void getCandidatesTest()
     {
         Long uid = 1082l;

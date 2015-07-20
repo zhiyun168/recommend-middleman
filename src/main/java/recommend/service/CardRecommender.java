@@ -37,8 +37,11 @@ public class CardRecommender implements ICardRecommender{
             page = 1;
         }
 
-
-        if(!loader.hasLoadToCache(uid))
+        if(loader.hasLoadToCache(uid))
+        {
+            return loadFromCache(uid, page, pageSize);
+        }
+        else
         {
             boolean hasLoad = loader.loadToCache(uid);
             if(hasLoad)
@@ -57,7 +60,7 @@ public class CardRecommender implements ICardRecommender{
         BoundListOperations<String, String> ops = stringRedisTemplate.boundListOps(recKey);
 
         int start = (page - 1)*pageSize;
-        int end = start + pageSize;
+        int end = start + pageSize - 1;
 
         return ops.range(start, end);
     }
