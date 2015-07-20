@@ -8,5 +8,5 @@ echo "config files:"
 ls config
 echo "copy config files to resources"
 cp -R config/* src/main/resources/
-mvn package
+mvn package -Dmaven.test.skip=true
 
