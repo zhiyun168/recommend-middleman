@@ -62,7 +62,7 @@ public class RecUserLoader extends  Loader{
     }
 
     @Override
-    protected String getEsType() {
+    public String getEsType() {
         return ES_Type;
     }
 

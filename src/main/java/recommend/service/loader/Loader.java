@@ -36,7 +36,7 @@ public abstract class Loader implements ApplicationContextAware {
     public abstract String recTmpKey(Long uid);
     public abstract String recLoadKey();
     public abstract String recLockKey(Long uid);
-    protected abstract String getEsType();
+    public abstract String getEsType();
 
     private static String INDEX = "recommendation";
     private static int TIMEOUT = 7;

@@ -30,9 +30,11 @@ public class UserRecommender2 implements IUserRecommender{
 
     @Override
     public List<String> getRandomCandidates(Long uid, int maxSize) {
+        List<String> candidate ;
+
         if(recUserLoader.hasLoadToCache(uid))
         {
-            return loadRandomFromCache(uid, maxSize);
+            candidate = loadRandomFromCache(uid, maxSize);
         }
         else
         {
@@ -40,10 +42,13 @@ public class UserRecommender2 implements IUserRecommender{
             if(hasLoad)
             {
                 //cache里读
-                return loadRandomFromCache(uid, maxSize);
+                candidate =loadRandomFromCache(uid, maxSize);
             }
+            else
+                candidate = loadRandomFromStorage(uid, maxSize);
         }
-        return loadRandomFromStorage(uid, maxSize);
+        log.info("{}:{}", recUserLoader.getEsType(), candidate);
+        return candidate;
     }
 
     private List<String> loadRandomFromCache(Long uid, int maxSie)

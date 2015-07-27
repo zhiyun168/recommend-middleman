@@ -37,9 +37,11 @@ public class CardRecommender implements ICardRecommender{
             page = 1;
         }
 
+        List<String> candidate ;
+
         if(loader.hasLoadToCache(uid))
         {
-            return loadFromCache(uid, page, pageSize);
+            candidate = loadFromCache(uid, page, pageSize);
         }
         else
         {
@@ -47,11 +49,14 @@ public class CardRecommender implements ICardRecommender{
             if(hasLoad)
             {
                 //cache里读
-                return loadFromCache(uid, page, pageSize);
+                candidate =loadFromCache(uid, page, pageSize);
             }
+            else
+                candidate = loadFromStorage(uid, page, pageSize);
         }
 
-        return loadFromStorage(uid, page, pageSize);
+        log.info("{}:{}", loader.getEsType(), candidate);
+        return candidate;
     }
 
     public List<String> loadFromCache(Long uid, int page, int pageSize)

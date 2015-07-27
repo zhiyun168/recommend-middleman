@@ -1,6 +1,8 @@
 package recommend.service;
 
 import com.zhiyun168.service.api.recommend.IGoalRecommender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,6 +20,8 @@ import java.util.Random;
 @Service
 public class GoalRecommender implements IGoalRecommender {
 
+    private static Logger log = LoggerFactory.getLogger(GoalRecommender.class);
+
     @Autowired
     private RecGoalLoader recGoalLoader;
     @Autowired
@@ -33,9 +37,11 @@ public class GoalRecommender implements IGoalRecommender {
     @Override
     public List<String> getCandidates(Long uid, int maxSize)
     {
+        List<String> candidate ;
+
         if(recGoalLoader.hasLoadToCache(uid))
         {
-            return loadRandomFromCache(uid, maxSize);
+            candidate = loadRandomFromCache(uid, maxSize);
         }
         else
         {
@@ -43,10 +49,14 @@ public class GoalRecommender implements IGoalRecommender {
             if(hasLoad)
             {
                 //cache里读
-                return loadRandomFromCache(uid, maxSize);
+                candidate = loadRandomFromCache(uid, maxSize);
             }
+            else
+                candidate = loadRandomFromStorage(uid, maxSize);
         }
-        return loadRandomFromStorage(uid, maxSize);
+
+        log.info("{}:{}", recGoalLoader.getEsType(), candidate);
+        return candidate;
     }
 
 

@@ -58,7 +58,7 @@ public class RecGoalLoader extends Loader {
     }
 
     @Override
-    protected String getEsType() {
+    public String getEsType() {
         return ES_Type;
     }
 
