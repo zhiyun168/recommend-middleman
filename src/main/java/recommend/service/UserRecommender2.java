@@ -24,15 +24,9 @@ public class UserRecommender2 implements IUserRecommender{
     @Autowired
     private RecUserLoader recUserLoader;
     @Autowired
-    private IUserService userService;
-    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    private static int MAX_CARD_COUNT = 3;
     Random random = new Random();
-
-
-
 
     @Override
     public List<String> getRandomCandidates(Long uid, int maxSize) {
@@ -70,20 +64,12 @@ public class UserRecommender2 implements IUserRecommender{
 
     private List<String> loadRandomFromStorage(Long uid, int maxSie)
     {
-        List<String> recUser = recUserLoader.getRecUserFromStorage(uid);
+        List<String> recUser = recUserLoader.getCandidatesFromStorage(uid);
 
         //List<String> filtratedRec = recUser;
 
         //过滤推荐用户
-        List<String> filtratedRec = new ArrayList<>();
-        for(String recUid: recUser)
-        {
-            Long rec_id = Long.parseLong(recUid);
-            Long cardCount = userService.getUserCardsCount(rec_id);
-            if(cardCount!=null && cardCount >= MAX_CARD_COUNT)
-                filtratedRec.add(recUid);
-        }
-
+        List<String> filtratedRec = recUserLoader.filter(recUser, uid);
         int len = filtratedRec.size();
 
         if(len == 0)

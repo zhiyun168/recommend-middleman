@@ -58,6 +58,9 @@ public abstract class Loader implements ApplicationContextAware {
         return rec;
     }
 
+
+    protected void afterLoad(Long uid){};
+
     /**
      * 用户的推荐 是否加载到cache
      * @param uid
@@ -96,7 +99,7 @@ public abstract class Loader implements ApplicationContextAware {
                 //log.info("start to load:" + uid.toString());
                 List<String> rec = getCandidatesFromStorage(uid);
 
-                //过滤推荐任务
+                //过滤推荐
                 List<String> filtratedRec = filter(rec, uid);
 
                 if(!filtratedRec.isEmpty())
@@ -110,6 +113,8 @@ public abstract class Loader implements ApplicationContextAware {
 
                 stringRedisTemplate.opsForHash().put(recLoadKey(),
                         uid.toString(), loadTime);
+
+                afterLoad(uid);
 
                 ok = true;
             }

@@ -63,7 +63,7 @@ public class FeelListener implements MessageListenerConcurrently {
         if(recUserLoader.hasLoadToCache(follower))
         {
             //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-            recUserLoader.deleteRecUser(follower, leader);
+            recUserLoader.deleteCandidates(follower, leader);
         }
         else
         {
@@ -71,13 +71,13 @@ public class FeelListener implements MessageListenerConcurrently {
             if(hasLoad)
             {
                 //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                recUserLoader.deleteRecUser(follower, leader);
+                recUserLoader.deleteCandidates(follower, leader);
             }
 
             else
             {
                 //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
-                recUserLoader.addFollowedRecUser(follower, leader);
+                recUserLoader.deleteCandidates(follower, leader);
             }
 
         }
