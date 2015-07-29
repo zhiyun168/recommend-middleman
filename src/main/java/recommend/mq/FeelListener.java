@@ -45,7 +45,7 @@ public class FeelListener implements MessageListenerConcurrently {
                     handleJoinGoal(msg);
                 }
                 else if ("veryCard".equals(tag)) {
-                    log.info("veryCard");
+                    //log.info("veryCard");
                     handleVeryCard(msg);
                 }
                 else {
@@ -125,7 +125,7 @@ public class FeelListener implements MessageListenerConcurrently {
         if(uid == null || card_id ==null)
             return;
 
-        log.info("{}:{}", uid, card_id);
+        //log.info("{}:{}", uid, card_id);
 
         if(recCardLoader.hasLoadToCache(uid))
         {
