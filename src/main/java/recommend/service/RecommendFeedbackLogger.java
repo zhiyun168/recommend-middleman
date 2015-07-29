@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.zhiyun168.service.api.recommend.IRecommendFeedbackLogger;
+import org.springframework.stereotype.Service;
 import recommend.service.loader.Loader;
 import recommend.service.loader.RecCardLoader;
 import recommend.service.loader.RecGoalLoader;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Created by ouduobiao on 15/7/29.
  */
+@Service
 public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
 
     private static Logger log = LoggerFactory.getLogger(RecommendFeedbackLogger.class);
