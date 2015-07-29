@@ -1,4 +1,4 @@
-package recommend.service;
+package recommend.service.recommender;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import com.zhiyun168.service.api.recommend.ICardRecommender;
+import recommend.service.RecommendFeedbackLogger;
 import recommend.service.loader.Loader;
 
 import java.util.Collections;
@@ -24,9 +25,10 @@ public class CardRecommender implements ICardRecommender{
     @Autowired
     @Qualifier("recCardLoader")
     private Loader loader;
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private RecommendFeedbackLogger recommendFeedbackLogger;
 
     @Override
     public List<String> getCandidates(Long uid, int page, int pageSize) {
@@ -55,7 +57,7 @@ public class CardRecommender implements ICardRecommender{
                 candidate = loadFromStorage(uid, page, pageSize);
         }
 
-        log.info("{}:{}", loader.getEsType(), candidate);
+        recommendFeedbackLogger.view("card",uid.toString(), candidate);
         return candidate;
     }
 

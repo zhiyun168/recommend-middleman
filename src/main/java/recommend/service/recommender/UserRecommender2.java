@@ -1,12 +1,12 @@
-package recommend.service;
+package recommend.service.recommender;
 
-import com.zhiyun168.service.api.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import recommend.service.RecommendFeedbackLogger;
 import recommend.service.api.IUserRecommender;
 import recommend.service.loader.RecUserLoader;
 import recommend.utils.CacheKeyHelper;
@@ -25,6 +25,8 @@ public class UserRecommender2 implements IUserRecommender{
     private RecUserLoader recUserLoader;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private RecommendFeedbackLogger recommendFeedbackLogger;
 
     Random random = new Random();
 
@@ -47,7 +49,7 @@ public class UserRecommender2 implements IUserRecommender{
             else
                 candidate = loadRandomFromStorage(uid, maxSize);
         }
-        log.info("{}:{}", recUserLoader.getEsType(), candidate);
+        recommendFeedbackLogger.view("user",uid.toString(), candidate);
         return candidate;
     }
 

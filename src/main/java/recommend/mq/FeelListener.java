@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import recommend.service.loader.RecCardLoader;
 import recommend.service.loader.RecUserLoader;
 import recommend.service.loader.RecGoalLoader;
 import recommend.utils.ObjectUtil;
@@ -28,6 +29,8 @@ public class FeelListener implements MessageListenerConcurrently {
     private RecUserLoader recUserLoader;
     @Autowired
     private RecGoalLoader recGoalLoader;
+    @Autowired
+    private RecCardLoader recCardLoader;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -35,12 +38,16 @@ public class FeelListener implements MessageListenerConcurrently {
 
             try{
                 String tag = msg.getTags();
-                if("addFollow".equals(tag))
+                if("addFollow".equals(tag)) {
                     handleAddFollow(msg);
-                else if ("join".equals(tag))
+                }
+                else if ("join".equals(tag)) {
                     handleJoinGoal(msg);
-                else
-                {
+                }
+                else if ("veryCard".equals(tag)) {
+                    handleVeryCard(msg);
+                }
+                else {
                     log.warn("未知消息："+ msg.toString());
                 }
             }
@@ -103,6 +110,33 @@ public class FeelListener implements MessageListenerConcurrently {
             {
                 //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
                 recGoalLoader.deleteCandidates(uid,gid);
+            }
+        }
+    }
+
+    private void handleVeryCard(MessageExt msg)
+    {
+        byte[] body = msg.getBody();
+        Map very = (Map) ObjectUtil.byteToObject(body);
+
+        Long uid = (Long)very.get("user_id");
+        Long card_id = (Long)very.get("card_id");
+        if(uid == null || card_id ==null)
+            return;
+
+        if(recCardLoader.hasLoadToCache(uid))
+        {
+            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
+            recCardLoader.deleteCandidates(uid,card_id);
+        }
+        else
+        {
+
+            boolean hasLoad = recCardLoader.loadToCache(uid);
+            if(hasLoad)//
+            {
+                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
+                recCardLoader.deleteCandidates(uid,card_id);
             }
         }
     }

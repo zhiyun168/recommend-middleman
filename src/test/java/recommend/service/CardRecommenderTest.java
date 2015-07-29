@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import recommend.RecommendMiddlemanApplication;
-import recommend.service.loader.RecCardLoader;
+import recommend.service.recommender.CardRecommender;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package recommend.service;
+package recommend.service.recommender;
 
 import com.zhiyun168.service.api.recommend.IGoalRecommender;
 import org.slf4j.Logger;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import recommend.service.RecommendFeedbackLogger;
 import recommend.service.loader.RecGoalLoader;
 import recommend.utils.CacheKeyHelper;
 
@@ -26,6 +27,8 @@ public class GoalRecommender implements IGoalRecommender {
     private RecGoalLoader recGoalLoader;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private RecommendFeedbackLogger recommendFeedbackLogger;
 
     Random random = new Random();
 
@@ -55,7 +58,7 @@ public class GoalRecommender implements IGoalRecommender {
                 candidate = loadRandomFromStorage(uid, maxSize);
         }
 
-        log.info("{}:{}", recGoalLoader.getEsType(), candidate);
+        recommendFeedbackLogger.view("goal",uid.toString(), candidate);
         return candidate;
     }
 
