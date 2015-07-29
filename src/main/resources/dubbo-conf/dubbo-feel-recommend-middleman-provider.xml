@@ -24,5 +24,5 @@
  <dubbo:service timeout="3000" retries="0" interface="recommend.service.api.IUserRecommender" ref="userRecommender2" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IGoalRecommender" ref="goalRecommender" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ICardRecommender" ref="cardRecommender" />
-
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IRecommendFeedbackLogger" ref="recommendFeedbackLogger" />
 </beans>
