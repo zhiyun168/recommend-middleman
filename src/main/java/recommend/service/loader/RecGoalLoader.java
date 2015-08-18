@@ -35,6 +35,7 @@ public class RecGoalLoader extends Loader {
     private IGoalService goalService;
 
     private static String ES_Type = "genderGoal";
+    private static String ES_ID_FIELD = "user";
 
 
     @Override
@@ -80,5 +81,9 @@ public class RecGoalLoader extends Loader {
 
     }
 
+    @Override
+    public String getEsIdField() {
+        return ES_ID_FIELD;
+    }
 
 }

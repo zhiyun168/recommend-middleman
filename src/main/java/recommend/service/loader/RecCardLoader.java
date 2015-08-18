@@ -14,6 +14,7 @@ public class RecCardLoader extends Loader {
     protected static Logger log = LoggerFactory.getLogger(RecCardLoader.class);
 
     private static String ES_Type = "followingUserLikedCard";
+    private static String ES_ID_FIELD = "user";
 
     @Override
     public String recKey(Long uid) {
@@ -40,5 +41,8 @@ public class RecCardLoader extends Loader {
         return ES_Type;
     }
 
-
+    @Override
+    public String getEsIdField() {
+        return ES_ID_FIELD;
+    }
 }

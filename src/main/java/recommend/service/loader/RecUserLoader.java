@@ -39,6 +39,7 @@ public class RecUserLoader extends  Loader{
 
     private static String ES_Type = "alsoFollowing";
     private static int MAX_CARD_COUNT = 3;
+    private static String ES_ID_FIELD = "user";
 
 
     @Override
@@ -110,6 +111,12 @@ public class RecUserLoader extends  Loader{
             stringRedisTemplate.delete(followedKey);
         }
     }
+
+    @Override
+    public String getEsIdField() {
+        return ES_ID_FIELD;
+    }
+
 
 
 }

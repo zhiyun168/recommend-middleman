@@ -12,16 +12,19 @@ public class CacheKeyHelper {
     private static final String REC_LOAD_LOCK_KEY_PREFIX = "feel:rec:load:lock";
     private static final String REC_GOAL_LOAD_LOCK_KEY_PREFIX = "feel:rec:goal:load:lock";
     private static final String REC_CARD_LOAD_LOCK_KEY_PREFIX = "feel:rec:card:load:lock";
+    private static final String REC_TAG_LOAD_LOCK_KEY_PREFIX = "feel:rec:tag:load:lock";
 
     private static final String REC_USER_PREFIX = "feel:rec:user";
     private static final String REC_GOAL_PREFIX = "feel:rec:goal";
     private static final String REC_CARD_PREFIX = "feel:rec:card";
     private static final String REC_USER_FOLLOWED_PREFIX = "feel:rec:user:followed";
+    private static final String REC_TAG_PREFIX = "feel:rec:tag";
 
 
     public static final String REC_LOAD_KEY = "feel:rec:load";
     public static final String REC_GOAL_LOAD_KEY = "feel:rec:goal:load";
     public static final String REC_CARD_LOAD_KEY = "feel:rec:card:load";
+    public static final String REC_TAG_LOAD_KEY = "feel:rec:tag:load";
 
 
     /**
@@ -39,6 +42,11 @@ public class CacheKeyHelper {
         return StringHelper.DotJoiner.join(REC_GOAL_LOAD_LOCK_KEY_PREFIX, uid);
     }
 
+    public static String recTagLockKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_TAG_LOAD_LOCK_KEY_PREFIX, id);
+    }
+
     public static String recCardLockKey(Long uid)
     {
         return StringHelper.DotJoiner.join(REC_CARD_LOAD_LOCK_KEY_PREFIX, uid);
@@ -54,6 +62,11 @@ public class CacheKeyHelper {
         return StringHelper.DotJoiner.join(REC_GOAL_PREFIX,"tmp",uid);
     }
 
+    public static String recTmpTagKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_TAG_PREFIX,"tmp",id);
+    }
+
     public static String recTmpCardKey(Long uid)
     {
         return StringHelper.DotJoiner.join(REC_CARD_PREFIX,"tmp",uid);
@@ -67,6 +80,11 @@ public class CacheKeyHelper {
     public static String recGoalKey(Long uid)
     {
         return StringHelper.DotJoiner.join(REC_GOAL_PREFIX, uid);
+    }
+
+    public static String recTagKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_TAG_PREFIX, id);
     }
 
     public static String recCardKey(Long uid)

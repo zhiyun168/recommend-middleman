@@ -32,11 +32,12 @@ public abstract class Loader implements ApplicationContextAware {
 
     protected SearchClientService searchClientService;
 
-    public abstract String recKey(Long uid);
-    public abstract String recTmpKey(Long uid);
+    public abstract String recKey(Long id);
+    public abstract String recTmpKey(Long id);
     public abstract String recLoadKey();
-    public abstract String recLockKey(Long uid);
+    public abstract String recLockKey(Long id);
     public abstract String getEsType();
+    public abstract String getEsIdField();
 
     private static String INDEX = "recommendation";
     private static int TIMEOUT = 7;
@@ -47,44 +48,59 @@ public abstract class Loader implements ApplicationContextAware {
         this.searchClientService = applicationContext.getBean(SearchClientService.class);
     }
 
-    public void deleteCandidates(Long uid, Long recId)
+    /**
+     * 从id的候选集合删除推荐recId
+     * @param id
+     * @param recId
+     */
+    public void deleteCandidates(Long id, Long recId)
     {
-        String recKey = recKey(uid);
+        String recKey = recKey(id);
         stringRedisTemplate.opsForList().remove(recKey, 0, recId.toString());
     }
 
-    public  List<String> filter(List<String> rec, Long uid)
+    /**
+     * 过滤候选集
+     * @param rec
+     * @param id
+     * @return
+     */
+    public  List<String> filter(List<String> rec, Long id)
     {
         return rec;
     }
 
+    /**
+     * 加载id的候选集后执行的操作
+     * @param id
+     */
+    protected void afterLoad(Long id){};
 
-    protected void afterLoad(Long uid){};
 
     /**
-     * 用户的推荐 是否加载到cache
-     * @param uid
+     * 推荐目标id的推荐 是否加载到cache
+     * @param id
      * @return
      */
-    public boolean hasLoadToCache(Long uid)
+    public boolean hasLoadToCache(Long id)
     {
-        Preconditions.checkNotNull(uid, "uid不可空");
-        String recKey = recKey(uid);
+        Preconditions.checkNotNull(id, "id不可空");
+        String recKey = recKey(id);
         String loadKey = recLoadKey();
 
-        return stringRedisTemplate.opsForHash().hasKey(loadKey, uid.toString())
+        return stringRedisTemplate.opsForHash().hasKey(loadKey, id.toString())
                 && stringRedisTemplate.hasKey(recKey);
     }
 
     /**
-     *加载用户的推荐任务进cache
-     * @param uid
+     *加载推荐目标id的推荐任务进cache
+     * @param id
      */
-    public boolean loadToCache(Long uid)
+    public boolean loadToCache(Long id)
     {
-        Preconditions.checkNotNull(uid, "uid不可空");
+        Preconditions.checkNotNull(id, "id不可空");
 
-        String lockKey = recLockKey(uid);
+        String lockKey = recLockKey(id);
         String loadTime = String.valueOf(System.currentTimeMillis());
 
         boolean ok=false;
@@ -97,30 +113,30 @@ public abstract class Loader implements ApplicationContextAware {
             //获取加载锁，从es加载进redis
             try {
                 //log.info("start to load:" + uid.toString());
-                List<String> rec = getCandidatesFromStorage(uid);
+                List<String> rec = getCandidatesFromStorage(id);
 
                 //过滤推荐
-                List<String> filtratedRec = filter(rec, uid);
+                List<String> filtratedRec = filter(rec, id);
 
                 if(!filtratedRec.isEmpty())
                 {
-                    String recKey = recKey(uid);
-                    String tmpRecKey = recTmpKey(uid);
+                    String recKey = recKey(id);
+                    String tmpRecKey = recTmpKey(id);
                     stringRedisTemplate.opsForList().rightPushAll(tmpRecKey, filtratedRec);
                     stringRedisTemplate.expire(tmpRecKey, TIMEOUT, TimeUnit.DAYS);
                     stringRedisTemplate.rename(tmpRecKey, recKey);
                 }
 
                 stringRedisTemplate.opsForHash().put(recLoadKey(),
-                        uid.toString(), loadTime);
+                        id.toString(), loadTime);
 
-                afterLoad(uid);
+                afterLoad(id);
 
                 ok = true;
             }
             catch (Exception e)
             {
-                String msg= StringHelper.DotJoiner.join("加载用户的推荐失败", uid);
+                String msg= StringHelper.DotJoiner.join("加载推荐失败", id);
                 log.error(msg, e);
             }
             finally {
@@ -134,14 +150,14 @@ public abstract class Loader implements ApplicationContextAware {
 
     /**
      *从存储推荐信息的源获取所有推荐
-     * @param uid
+     * @param id
      * @return
      */
-    public List<String> getCandidatesFromStorage(Long uid)
+    public List<String> getCandidatesFromStorage(Long id)
     {
-        Preconditions.checkNotNull(uid, "uid不可空");
+        Preconditions.checkNotNull(id, "id不可空");
         Client client = searchClientService.getSearchClient();
-        QueryBuilder userQuery = QueryBuilders.termQuery("user", uid.toString());
+        QueryBuilder userQuery = QueryBuilders.termQuery(getEsIdField(), id.toString());
         SearchResponse response = client.prepareSearch(INDEX)
                 .setTypes(getEsType()).setQuery(userQuery)
                 .setFrom(0)

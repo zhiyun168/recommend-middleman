@@ -37,6 +37,10 @@ public class UpdateRecReceiver {
                 {
                     updateFollowingUserLikedCards();
                 }
+                else if("TAG_RECOMMENDATION_DONE".equals(msg))
+                {
+                    updateTagRecommendation();
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);
@@ -66,6 +70,11 @@ public class UpdateRecReceiver {
     private void updateFollowingUserLikedCards()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_CARD_LOAD_KEY);
+    }
+
+    private void updateTagRecommendation()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_TAG_LOAD_KEY);
     }
 
 }

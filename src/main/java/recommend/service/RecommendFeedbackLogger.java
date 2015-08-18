@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.zhiyun168.service.api.recommend.IRecommendFeedbackLogger;
 import org.springframework.stereotype.Service;
-import recommend.service.loader.Loader;
-import recommend.service.loader.RecCardLoader;
-import recommend.service.loader.RecGoalLoader;
-import recommend.service.loader.RecUserLoader;
+import recommend.service.loader.*;
 import recommend.utils.JsonSerializer;
 
 import java.util.Collections;
@@ -29,10 +26,13 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
     private RecUserLoader recUserLoader;
     @Autowired
     private RecGoalLoader recGoalLoader;
+    @Autowired
+    private RecTagLoader recTagLoader;
 
     private final static String USER = "user";
     private final static String CARD = "card";
     private final static String GOAL = "goal";
+    private final static String TAG = "tag";
 
 
     private Loader selectLoader(String type)
@@ -50,21 +50,25 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
         {
             loader = recGoalLoader;
         }
+        else if(TAG.equals(type))
+        {
+            loader = recTagLoader;
+        }
 
         return loader;
     }
 
     @Override
-    public void like(String type, String uid, String itemId) {
+    public void like(String type, String id, String itemId) {
 
-        if(Strings.isNullOrEmpty(uid)|| Strings.isNullOrEmpty(itemId))
+        if(Strings.isNullOrEmpty(id)|| Strings.isNullOrEmpty(itemId))
             return;
 
         Loader loader = selectLoader(type);
         if(loader!=null)
         {
             String sub_type = loader.getEsType();
-            Data data = new Data(type, sub_type, uid, Collections.singletonList(itemId),
+            Data data = new Data(type, sub_type, id, Collections.singletonList(itemId),
                     "like");
             log.info(JsonSerializer.serializeAsString(data));
         }
@@ -107,15 +111,15 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
     class Data{
         private String type;
         private String sub_type;
-        private String uid;
+        private String id;
         private List<String> candidates;
         private String action;
         private long created;
 
-        public Data(String type, String sub_type, String uid, List<String> candidates, String action) {
+        public Data(String type, String sub_type, String id, List<String> candidates, String action) {
             this.type = type;
             this.sub_type = sub_type;
-            this.uid = uid;
+            this.id = id;
             this.candidates = candidates;
             this.action = action;
             this.created = System.currentTimeMillis();
@@ -137,12 +141,12 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
             this.sub_type = sub_type;
         }
 
-        public String getUid() {
-            return uid;
+        public String getId() {
+            return id;
         }
 
-        public void setUid(String uid) {
-            this.uid = uid;
+        public void setId(String id) {
+            this.id = id;
         }
 
         public List<String> getCandidates() {

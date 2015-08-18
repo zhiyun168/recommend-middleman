@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+//import recommend.service.recommender.TagRecommender;
 
 
 import java.util.Arrays;
@@ -41,6 +42,10 @@ public class RecommendMiddlemanApplication {
         //IGoalService goalService = ctx.getBean(IGoalService.class);
 
         //System.out.println(goalService.isJoinGoal(13l,10l));
+
+        //TagRecommender tagRecommender = ctx.getBean(TagRecommender.class);
+        //System.out.println(tagRecommender.getCandidates(15204l, 1, 2));
+        //System.out.println(tagRecommender.getCandidates(66377l, 1, 2));
 
 
         /*
