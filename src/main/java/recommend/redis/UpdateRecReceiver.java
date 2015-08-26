@@ -28,14 +28,14 @@ public class UpdateRecReceiver {
             try {
                 if("USER".equals(msg))
                 {
-                    updateAlsoFollowing();
+                    updateUser();
                 }
                 else if("GENDER_GOAL".equals(msg)) {
                     updateGenderGoal();
                 }
-                else if("FOLLOWING_USER_LIKED_CARDS".equals(msg))
+                else if("CARD".equals(msg))
                 {
-                    updateFollowingUserLikedCards();
+                    updateCard();
                 }
                 else if("TAG_RECOMMENDATION_DONE".equals(msg))
                 {
@@ -57,7 +57,7 @@ public class UpdateRecReceiver {
         log.info("end");
     }
 
-    private void updateAlsoFollowing()
+    private void updateUser()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_LOAD_KEY);
     }
@@ -67,7 +67,7 @@ public class UpdateRecReceiver {
         stringRedisTemplate.delete(CacheKeyHelper.REC_GOAL_LOAD_KEY);
     }
 
-    private void updateFollowingUserLikedCards()
+    private void updateCard()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_CARD_LOAD_KEY);
     }

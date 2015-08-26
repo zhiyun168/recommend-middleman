@@ -13,8 +13,14 @@ public class RecCardLoader extends Loader {
 
     protected static Logger log = LoggerFactory.getLogger(RecCardLoader.class);
 
-    private static String ES_Type = "followingUserLikedCard";
+    private static String ES_Index = "recommendation_card_alias";
+    private static String ES_Type = "CARD";
     private static String ES_ID_FIELD = "user";
+
+    @Override
+    public String getEsIndexName() {
+        return ES_Index;
+    }
 
     @Override
     public String recKey(Long uid) {
