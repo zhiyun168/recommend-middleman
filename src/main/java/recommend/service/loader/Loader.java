@@ -123,13 +123,16 @@ public abstract class Loader implements ApplicationContextAware {
                 //过滤推荐
                 List<String> filtratedRec = filter(rec, id);
 
+                String recKey = recKey(id);
                 if(!filtratedRec.isEmpty())
                 {
-                    String recKey = recKey(id);
                     String tmpRecKey = recTmpKey(id);
                     stringRedisTemplate.opsForList().rightPushAll(tmpRecKey, filtratedRec);
                     stringRedisTemplate.expire(tmpRecKey, TIMEOUT, TimeUnit.DAYS);
                     stringRedisTemplate.rename(tmpRecKey, recKey);
+                }
+                else {
+                    stringRedisTemplate.delete(recKey);
                 }
 
                 stringRedisTemplate.opsForHash().put(recLoadKey(),
