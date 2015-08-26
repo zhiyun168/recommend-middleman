@@ -39,7 +39,12 @@ public abstract class Loader implements ApplicationContextAware {
     public abstract String getEsType();
     public abstract String getEsIdField();
 
-    private static String INDEX = "recommendation";
+    public String getEsIndexName(){
+        return "recommendation";
+    }
+
+
+
     private static int TIMEOUT = 7;
 
     @Override
@@ -158,7 +163,7 @@ public abstract class Loader implements ApplicationContextAware {
         Preconditions.checkNotNull(id, "id不可空");
         Client client = searchClientService.getSearchClient();
         QueryBuilder userQuery = QueryBuilders.termQuery(getEsIdField(), id.toString());
-        SearchResponse response = client.prepareSearch(INDEX)
+        SearchResponse response = client.prepareSearch(getEsIndexName())
                 .setTypes(getEsType()).setQuery(userQuery)
                 .setFrom(0)
                 .setSize(1)

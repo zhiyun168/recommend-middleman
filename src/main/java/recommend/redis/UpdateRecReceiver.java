@@ -26,7 +26,7 @@ public class UpdateRecReceiver {
         if(isLock)
         {
             try {
-                if("ALSO_FOLLOWING".equals(msg))
+                if("USER".equals(msg))
                 {
                     updateAlsoFollowing();
                 }

@@ -37,7 +37,7 @@ public class RecUserLoader extends  Loader{
     private IUserService userService;
 
 
-    private static String ES_Type = "alsoFollowing";
+    private static String ES_Type = "USER";
     private static int MAX_CARD_COUNT = 3;
     private static String ES_ID_FIELD = "user";
 
