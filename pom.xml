@@ -24,6 +24,36 @@
         <com.fasterxml.jackson.core.version>2.4.1</com.fasterxml.jackson.core.version>
     </properties>
 
+
+    <repositories>
+        <repository>
+            <id>repo.linkid.be.release</id>
+            <name>LinkID Public Repository</name>
+            <url>http://repo.linkid.be/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>repo.linkid.be.snapshot</id>
+            <name>LinkID Public Repository</name>
+            <url>http://repo.linkid.be/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
+    </repositories>
+
 	<dependencies>
 
         <dependency>
@@ -116,6 +146,12 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${com.fasterxml.jackson.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-s3-rolling-policy</artifactId>
+            <version>1.1</version>
         </dependency>
 
 

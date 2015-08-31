@@ -12,16 +12,27 @@
         </encoder>
     </appender>
 
-
         <appender name="FEEDBACK" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <!-- Support multiple-JVM writing to the same log file -->
-            <prudent>true</prudent>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>/data/recommend-middleman/rec.feedback.%d{yyyy-MM-dd}.log</fileNamePattern>
-            </rollingPolicy>
+            <file>rec.feedback.log</file>
             <encoder>
                 <pattern>%msg%n</pattern>
             </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.S3TimeBasedRollingPolicy">
+                <!-- Rollover every minute -->
+                <fileNamePattern>rec.feedback.%d{yyyy-MM-dd_HH-mm}.%i.log.gz</fileNamePattern>
+                <awsAccessKey>AKIAP7A6NA2HRIN6RCXQ</awsAccessKey>
+                <awsSecretKey>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</awsSecretKey>
+                <s3BucketName>feel.recommender.log</s3BucketName>
+                <s3FolderName>recommend-middleman</s3FolderName>
+                <rolloverOnExit>true</rolloverOnExit>
+                <shutdownHookType>JVM_SHUTDOWN_HOOK</shutdownHookType>
+                <prefixTimestamp>false</prefixTimestamp>
+                <prefixIdentifier>true</prefixIdentifier>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
         </appender>
 
         <logger name="recommend.service.RecommendFeedbackLogger" level="info" additivity="false">
