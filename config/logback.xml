@@ -13,7 +13,7 @@
     </appender>
 
         <appender name="FEEDBACK" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/data/recommend-middleman/rec.feedback.log</file>
+            <file>rec.feedback.log</file>
             <encoder>
                 <pattern>%msg%n</pattern>
             </encoder>
