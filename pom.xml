@@ -22,37 +22,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.7</java.version>
         <com.fasterxml.jackson.core.version>2.4.1</com.fasterxml.jackson.core.version>
+
+        <aws-java-sdk.version>1.10.14</aws-java-sdk.version>
+        <javax-servlet.version>2.4</javax-servlet.version>
+        <intellij-annotations.version>12.0</intellij-annotations.version>
+
     </properties>
 
-
-    <repositories>
-        <repository>
-            <id>repo.linkid.be.release</id>
-            <name>LinkID Public Repository</name>
-            <url>http://repo.linkid.be/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>repo.linkid.be.snapshot</id>
-            <name>LinkID Public Repository</name>
-            <url>http://repo.linkid.be/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </repository>
-    </repositories>
 
 	<dependencies>
 
@@ -148,12 +124,26 @@
             <version>${com.fasterxml.jackson.core.version}</version>
         </dependency>
 
+
+
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-s3-rolling-policy</artifactId>
-            <version>1.1</version>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>${aws-java-sdk.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${javax-servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${intellij-annotations.version}</version>
+        </dependency>
 
     </dependencies>
 	
