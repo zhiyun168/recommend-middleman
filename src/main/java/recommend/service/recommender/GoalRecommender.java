@@ -4,12 +4,13 @@ import com.zhiyun168.service.api.recommend.IGoalRecommender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.service.RecommendFeedbackLogger;
-import recommend.service.loader.RecGoalLoader;
-import recommend.utils.CacheKeyHelper;
+import recommend.service.loader.Loader;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,8 @@ public class GoalRecommender implements IGoalRecommender {
     private static Logger log = LoggerFactory.getLogger(GoalRecommender.class);
 
     @Autowired
-    private RecGoalLoader recGoalLoader;
+    @Qualifier("recGoalLoader")
+    private Loader loader;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -42,13 +44,13 @@ public class GoalRecommender implements IGoalRecommender {
     {
         List<String> candidate ;
 
-        if(recGoalLoader.hasLoadToCache(uid))
+        if(loader.hasLoadToCache(uid))
         {
             candidate = loadRandomFromCache(uid, maxSize);
         }
         else
         {
-            boolean hasLoad = recGoalLoader.loadToCache(uid);
+            boolean hasLoad = loader.loadToCache(uid);
             if(hasLoad)
             {
                 //cache里读
@@ -65,7 +67,7 @@ public class GoalRecommender implements IGoalRecommender {
 
     private List<String> loadRandomFromCache(Long uid, int maxSie)
     {
-        String recKey = CacheKeyHelper.recGoalKey(uid);
+        String recKey = loader.recKey(uid);
         BoundListOperations<String, String> ops = stringRedisTemplate.boundListOps(recKey);
         int len = ops.size().intValue();
         if(len == 0)
@@ -81,12 +83,12 @@ public class GoalRecommender implements IGoalRecommender {
 
     private List<String> loadRandomFromStorage(Long uid, int maxSie)
     {
-        List<String> rec = recGoalLoader.getCandidatesFromStorage(uid);
+        List<String> rec = loader.getCandidatesFromStorage(uid);
 
         //List<String> filtratedRec = recUser;
 
         //过滤推荐任务
-        List<String> filtratedRec = recGoalLoader.filter(rec,uid);
+        List<String> filtratedRec = loader.filter(rec,uid);
 
         int len = filtratedRec.size();
 

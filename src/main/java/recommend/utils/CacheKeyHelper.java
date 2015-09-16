@@ -13,18 +13,24 @@ public class CacheKeyHelper {
     private static final String REC_GOAL_LOAD_LOCK_KEY_PREFIX = "feel:rec:goal:load:lock";
     private static final String REC_CARD_LOAD_LOCK_KEY_PREFIX = "feel:rec:card:load:lock";
     private static final String REC_TAG_LOAD_LOCK_KEY_PREFIX = "feel:rec:tag:load:lock";
+    private static final String REC_NewUserTagContext_LOAD_LOCK_KEY_PREFIX = "feel:rec:NewUserTagContext:load:lock";
+    private static final String REC_NewUserGenderContext_LOAD_LOCK_KEY_PREFIX = "feel:rec:NewUserGenderContext:load:lock";
 
     private static final String REC_USER_PREFIX = "feel:rec:user";
     private static final String REC_GOAL_PREFIX = "feel:rec:goal";
     private static final String REC_CARD_PREFIX = "feel:rec:card";
     private static final String REC_USER_FOLLOWED_PREFIX = "feel:rec:user:followed";
     private static final String REC_TAG_PREFIX = "feel:rec:tag";
+    private static final String REC_NewUserTagContext_PREFIX = "feel:rec:NewUserTagContext";
+    private static final String REC_NewUserGenderContext_PREFIX = "feel:rec:NewUserGenderContext";
 
 
     public static final String REC_LOAD_KEY = "feel:rec:load";
     public static final String REC_GOAL_LOAD_KEY = "feel:rec:goal:load";
     public static final String REC_CARD_LOAD_KEY = "feel:rec:card:load";
     public static final String REC_TAG_LOAD_KEY = "feel:rec:tag:load";
+    public static final String REC_NewUserTagContext_LOAD_KEY = "feel:rec:NewUserTagContext:load";
+    public static final String REC_NewUserGenderContext_LOAD_KEY = "feel:rec:NewUserGenderContext:load";
 
 
     /**
@@ -100,6 +106,37 @@ public class CacheKeyHelper {
     public static String recLoadDelLockKey(String recType)
     {
         return StringHelper.DotJoiner.join(REC_LOAD_KEY, "lock", recType);
+    }
+
+
+    public static String newUserTagContextKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_NewUserTagContext_PREFIX, id);
+    }
+
+    public static String tmpNewUserTagContextKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_NewUserTagContext_PREFIX,"tmp",id);
+    }
+
+    public static String newUserTagContextLockKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_NewUserTagContext_LOAD_LOCK_KEY_PREFIX, id);
+    }
+
+    public static String newUserGenderContextKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_NewUserGenderContext_PREFIX, id);
+    }
+
+    public static String tmpNewUserGenderContextKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_NewUserGenderContext_PREFIX,"tmp",id);
+    }
+
+    public static String newUserGenderContextLockKey(Long id)
+    {
+        return StringHelper.DotJoiner.join(REC_NewUserGenderContext_LOAD_LOCK_KEY_PREFIX, id);
     }
 
 

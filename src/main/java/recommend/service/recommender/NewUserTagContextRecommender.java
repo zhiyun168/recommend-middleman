@@ -1,5 +1,6 @@
 package recommend.service.recommender;
 
+import com.zhiyun168.service.api.recommend.INewUserTagContextRecommender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,21 +9,22 @@ import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.service.RecommendFeedbackLogger;
-import recommend.service.api.IUserRecommender;
 import recommend.service.loader.Loader;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
- * Created by ouduobiao on 15/6/25.
+ * Created by ouduobiao on 15/7/13.
  */
 @Service
-public class UserRecommender2 implements IUserRecommender{
+public class NewUserTagContextRecommender implements INewUserTagContextRecommender {
 
-    private static Logger log = LoggerFactory.getLogger(UserRecommender2.class);
+    private static Logger log = LoggerFactory.getLogger(NewUserTagContextRecommender.class);
 
     @Autowired
-    @Qualifier("recUserLoader")
+    @Qualifier("newUserTagContextLoader")
     private Loader loader;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -31,33 +33,41 @@ public class UserRecommender2 implements IUserRecommender{
 
     Random random = new Random();
 
+    /**
+     * 获取推荐
+     * @param id
+     * @return
+     */
     @Override
-    public List<String> getRandomCandidates(Long uid, int maxSize) {
+    public List<String> getCandidates(Long id, int maxSize)
+    {
         List<String> candidate ;
 
-        if(loader.hasLoadToCache(uid))
+        if(loader.hasLoadToCache(id))
         {
-            candidate = loadRandomFromCache(uid, maxSize);
+            candidate = loadRandomFromCache(id, maxSize);
         }
         else
         {
-            boolean hasLoad = loader.loadToCache(uid);
+            boolean hasLoad = loader.loadToCache(id);
             if(hasLoad)
             {
                 //cache里读
-                candidate =loadRandomFromCache(uid, maxSize);
+                candidate = loadRandomFromCache(id, maxSize);
             }
             else
-                candidate = loadRandomFromStorage(uid, maxSize);
+                candidate = loadRandomFromStorage(id, maxSize);
         }
-        recommendFeedbackLogger.view("user",uid.toString(), candidate);
+
+        recommendFeedbackLogger.view("newUserTagContext",id.toString(), candidate);
         return candidate;
     }
 
-    private List<String> loadRandomFromCache(Long uid, int maxSie)
+
+    private List<String> loadRandomFromCache(Long id, int maxSie)
     {
-        String recUserKey = loader.recKey(uid);
-        BoundListOperations<String, String> ops = stringRedisTemplate.boundListOps(recUserKey);
+        String recKey = loader.recKey(id);
+        BoundListOperations<String, String> ops = stringRedisTemplate.boundListOps(recKey);
         int len = ops.size().intValue();
         if(len == 0)
             return Collections.EMPTY_LIST;
@@ -70,14 +80,15 @@ public class UserRecommender2 implements IUserRecommender{
         return ops.range(offset, offset + maxSie-1 );
     }
 
-    private List<String> loadRandomFromStorage(Long uid, int maxSie)
+    private List<String> loadRandomFromStorage(Long id, int maxSie)
     {
-        List<String> recUser = loader.getCandidatesFromStorage(uid);
+        List<String> rec = loader.getCandidatesFromStorage(id);
 
         //List<String> filtratedRec = recUser;
 
-        //过滤推荐用户
-        List<String> filtratedRec = loader.filter(recUser, uid);
+        //过滤推荐
+        List<String> filtratedRec = loader.filter(rec,id);
+
         int len = filtratedRec.size();
 
         if(len == 0)
@@ -89,13 +100,5 @@ public class UserRecommender2 implements IUserRecommender{
         int offset = random.nextInt(len - maxSie + 1);
         return filtratedRec.subList(offset, offset+maxSie);
     }
-
-
-    @Override
-    public List<String> getCandidates(Long uid, int page, int pageSize) {
-        return Collections.EMPTY_LIST;
-    }
-
-
 
 }

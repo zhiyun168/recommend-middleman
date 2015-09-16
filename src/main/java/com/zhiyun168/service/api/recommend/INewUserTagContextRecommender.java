@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * Created by ouduobiao on 15/7/13.
  */
-public interface IGoalRecommender {
+public interface INewUserTagContextRecommender {
 
-    List<String> getCandidates(Long uid, int maxSize);
+    List<String> getCandidates(Long id, int maxSize);
 
 }
