@@ -19,9 +19,9 @@ import java.util.Random;
  * Created by ouduobiao on 15/7/13.
  */
 @Service
-public class NewUserGenderContexRecommender implements INewUserGenderContextRecommender {
+public class NewUserGenderContextRecommender implements INewUserGenderContextRecommender {
 
-    private static Logger log = LoggerFactory.getLogger(NewUserGenderContexRecommender.class);
+    private static Logger log = LoggerFactory.getLogger(NewUserGenderContextRecommender.class);
 
     @Autowired
     @Qualifier("newUserGenderContextLoader")
@@ -32,6 +32,15 @@ public class NewUserGenderContexRecommender implements INewUserGenderContextReco
     private RecommendFeedbackLogger recommendFeedbackLogger;
 
     Random random = new Random();
+
+    @Override
+    public String getCandidates(Long sex) {
+        List<String> candidates = getCandidates(sex, 1);
+        if(candidates.isEmpty())
+            return null;
+        else
+            return candidates.get(0);
+    }
 
     /**
      * 获取推荐

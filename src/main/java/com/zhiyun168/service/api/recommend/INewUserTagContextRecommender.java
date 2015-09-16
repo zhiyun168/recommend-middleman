@@ -9,4 +9,6 @@ public interface INewUserTagContextRecommender {
 
     List<String> getCandidates(Long id, int maxSize);
 
+    String getCandidates(Long id);
+
 }

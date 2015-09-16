@@ -33,6 +33,16 @@ public class NewUserTagContextRecommender implements INewUserTagContextRecommend
 
     Random random = new Random();
 
+
+    @Override
+    public String getCandidates(Long sex) {
+        List<String> candidates = getCandidates(sex, 1);
+        if(candidates.isEmpty())
+            return null;
+        else
+            return candidates.get(0);
+    }
+
     /**
      * 获取推荐
      * @param id

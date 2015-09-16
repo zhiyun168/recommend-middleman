@@ -41,6 +41,14 @@ public class UpdateRecReceiver {
                 {
                     updateTagRecommendation();
                 }
+                else if("NEW_USER_TAG_GOOD_CONTEXT".equals(msg))
+                {
+                    updateNewUserTagContext();
+                }
+                else if("NEW_USER_GENDER_GOOD_CONTEXT".equals(msg))
+                {
+                    updateNewUserGenderContext();
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);
@@ -75,6 +83,16 @@ public class UpdateRecReceiver {
     private void updateTagRecommendation()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_TAG_LOAD_KEY);
+    }
+
+    private void updateNewUserTagContext()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_NewUserTagContext_LOAD_KEY);
+    }
+
+    private void updateNewUserGenderContext()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_NewUserGenderContext_LOAD_KEY);
     }
 
 }

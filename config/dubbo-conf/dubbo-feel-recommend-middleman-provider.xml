@@ -30,4 +30,9 @@
 
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ITagRecommender" ref="tagRecommender" />
 
+
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.INewUserTagContextRecommender" ref="newUserTagContextRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.INewUserGenderContextRecommender" ref="newUserGenderContextRecommender" />
+
+
 </beans>

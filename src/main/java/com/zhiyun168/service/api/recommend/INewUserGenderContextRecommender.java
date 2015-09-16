@@ -7,4 +7,6 @@ import java.util.List;
  */
 public interface INewUserGenderContextRecommender {
     List<String> getCandidates(Long sex, int maxSize);
+
+    String getCandidates(Long sex);
 }
