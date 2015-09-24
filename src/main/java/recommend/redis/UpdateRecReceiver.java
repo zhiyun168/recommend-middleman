@@ -53,6 +53,10 @@ public class UpdateRecReceiver {
                 {
                     updateJoinedGoalCard();
                 }
+                else if("RECENTLY_MOSTLY_USED_TAG".equals(msg))
+                {
+                    updateRecentlyMostlyUsedTag();
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);
@@ -102,6 +106,11 @@ public class UpdateRecReceiver {
     private void updateJoinedGoalCard()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_JOINED_GOAL_CARD_LOAD_KEY);
+    }
+
+    private void updateRecentlyMostlyUsedTag()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_RECENTLY_MOSTLY_USED_TAG_LOAD_KEY);
     }
 
 }
