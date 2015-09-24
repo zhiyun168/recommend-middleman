@@ -49,6 +49,10 @@ public class UpdateRecReceiver {
                 {
                     updateNewUserGenderContext();
                 }
+                else if("JOINED_SAME_GOAL_USER_CARD".equals(msg))
+                {
+                    updateJoinedGoalCard();
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);
@@ -93,6 +97,11 @@ public class UpdateRecReceiver {
     private void updateNewUserGenderContext()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_NewUserGenderContext_LOAD_KEY);
+    }
+
+    private void updateJoinedGoalCard()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_JOINED_GOAL_CARD_LOAD_KEY);
     }
 
 }
