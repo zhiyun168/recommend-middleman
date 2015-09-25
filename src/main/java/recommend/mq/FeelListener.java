@@ -8,9 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import recommend.service.loader.JoinedGoalCardLoader;
 import recommend.service.loader.RecCardLoader;
 import recommend.service.loader.RecUserLoader;
 import recommend.service.loader.RecGoalLoader;
+import recommend.service.recommender.JoinedGoalCardRecommender;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -31,6 +33,8 @@ public class FeelListener implements MessageListenerConcurrently {
     private RecGoalLoader recGoalLoader;
     @Autowired
     private RecCardLoader recCardLoader;
+    @Autowired
+    private JoinedGoalCardLoader JoinedGoalCardLoader;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -142,6 +146,22 @@ public class FeelListener implements MessageListenerConcurrently {
                 recCardLoader.deleteCandidates(uid,card_id);
             }
         }
+
+        if(JoinedGoalCardLoader.hasLoadToCache(uid))
+        {
+            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
+            JoinedGoalCardLoader.deleteCandidates(uid,card_id);
+        }
+        else
+        {
+            boolean hasLoad = JoinedGoalCardLoader.loadToCache(uid);
+            if(hasLoad)//
+            {
+                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
+                JoinedGoalCardLoader.deleteCandidates(uid,card_id);
+            }
+        }
+
     }
 
 }
