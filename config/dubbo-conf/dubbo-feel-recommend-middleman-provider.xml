@@ -38,4 +38,8 @@
 
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IRecentlyMostlyUsedTagRecommender" ref="recentlyMostlyUsedTagRecommender" />
 
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ISimilarUserCardRecommender" ref="similarUserCardRecommender" />
+
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ISimilarTagCardRecommender" ref="similarTagCardRecommender" />
+
 </beans>
