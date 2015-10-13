@@ -57,6 +57,14 @@ public class UpdateRecReceiver {
                 {
                     updateRecentlyMostlyUsedTag();
                 }
+                else if("SIMILAR_TAG_CARD".equals(msg))
+                {
+                    updateSimilarTagCard();
+                }
+                else if("SIMILAR_USER_CARD".equals(msg))
+                {
+                    updateSimilarUserCard();
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);
@@ -111,6 +119,16 @@ public class UpdateRecReceiver {
     private void updateRecentlyMostlyUsedTag()
     {
         stringRedisTemplate.delete(CacheKeyHelper.REC_RECENTLY_MOSTLY_USED_TAG_LOAD_KEY);
+    }
+
+    private void updateSimilarTagCard()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_SIMILAR_TAG_CARD_LOAD_KEY);
+    }
+
+    private void updateSimilarUserCard()
+    {
+        stringRedisTemplate.delete(CacheKeyHelper.REC_SIMILAR_USER_CARD_LOAD_KEY);
     }
 
 }
