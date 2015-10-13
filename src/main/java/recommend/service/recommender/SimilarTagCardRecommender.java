@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import recommend.service.RecommendFeedbackLogger;
 import recommend.service.loader.Loader;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,6 +97,30 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
             end = len;
 
         return list.subList(start, end);
+    }
+
+
+    @Override
+    public List<String> getCandidates(List<Long> ids, int page, int pageSize) {
+        int idCount = ids.size();
+        if(idCount == 0)
+        {
+            return Collections.EMPTY_LIST;
+        }
+        else
+        {
+            int pageSizePerId = pageSize / idCount;
+            int rem = pageSize - idCount * pageSizePerId;
+            List<String> res = new ArrayList<>(pageSize);
+            int size = pageSizePerId + rem;
+            for(Long id : ids)
+            {
+                List<String> cards = getCandidates(id, page, size);
+                res.addAll(cards);
+                size = pageSizePerId+(pageSizePerId-cards.size());
+            }
+            return res;
+        }
     }
 
 

@@ -7,4 +7,7 @@ import java.util.List;
  */
 public interface ISimilarTagCardRecommender {
     List<String> getCandidates(Long id, int page, int pageSize);
+
+    List<String> getCandidates(List<Long> ids, int page, int pageSize);
+
 }
