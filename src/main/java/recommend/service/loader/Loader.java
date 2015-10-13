@@ -64,6 +64,26 @@ public abstract class Loader implements ApplicationContextAware {
         stringRedisTemplate.opsForList().remove(recKey, 0, recId.toString());
     }
 
+
+    public void deleteCandidatesExt(Long id, Long recId)
+    {
+        if(this.hasLoadToCache(id))
+        {
+            this.deleteCandidates(id, recId);
+        }
+        else
+        {
+            boolean hasLoad = this.loadToCache(id);
+            if(hasLoad)//
+            {
+                this.deleteCandidates(id,recId);
+            }
+        }
+    }
+
+
+
+
     /**
      * 过滤候选集
      * @param rec

@@ -4,14 +4,12 @@ import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.common.message.MessageExt;
+import com.zhiyun168.service.api.ICardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import recommend.service.loader.JoinedGoalCardLoader;
-import recommend.service.loader.RecCardLoader;
-import recommend.service.loader.RecUserLoader;
-import recommend.service.loader.RecGoalLoader;
+import recommend.service.loader.*;
 import recommend.service.recommender.JoinedGoalCardRecommender;
 import recommend.utils.ObjectUtil;
 
@@ -27,6 +25,10 @@ public class FeelListener implements MessageListenerConcurrently {
 
     private static Logger log = LoggerFactory.getLogger(FeelListener.class);
 
+
+    @Autowired
+    private ICardService cardService;
+
     @Autowired
     private RecUserLoader recUserLoader;
     @Autowired
@@ -35,6 +37,11 @@ public class FeelListener implements MessageListenerConcurrently {
     private RecCardLoader recCardLoader;
     @Autowired
     private JoinedGoalCardLoader JoinedGoalCardLoader;
+
+    @Autowired
+    private SimilarTagCardLoader similarTagCardLoader;
+    @Autowired
+    private SimilarUserCardLoader similarUserCardLoader;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -72,27 +79,7 @@ public class FeelListener implements MessageListenerConcurrently {
         Map followInfo = (Map) ObjectUtil.byteToObject(body);
         Long leader = (Long) followInfo.get("leader");
         Long follower = (Long) followInfo.get("follower");
-        if(recUserLoader.hasLoadToCache(follower))
-        {
-            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-            recUserLoader.deleteCandidates(follower, leader);
-        }
-        else
-        {
-            boolean hasLoad = recUserLoader.loadToCache(follower);
-            if(hasLoad)
-            {
-                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                recUserLoader.deleteCandidates(follower, leader);
-            }
-
-            else
-            {
-                //log.info("add followed user 2-follower:{},leader:{}",follower,leader);
-                recUserLoader.deleteCandidates(follower, leader);
-            }
-
-        }
+        recUserLoader.deleteCandidatesExt(follower, leader);
     }
 
     private void handleJoinGoal(MessageExt msg)
@@ -102,22 +89,9 @@ public class FeelListener implements MessageListenerConcurrently {
         Long uid = Long.valueOf(gid_uid[1]);
         Long gid = Long.valueOf(gid_uid[0]);
 
-        if(recGoalLoader.hasLoadToCache(uid))
-        {
-            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-            recGoalLoader.deleteCandidates(uid,gid);
-        }
-        else
-        {
-
-            boolean hasLoad = recGoalLoader.loadToCache(uid);
-            if(hasLoad)//
-            {
-                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                recGoalLoader.deleteCandidates(uid,gid);
-            }
-        }
+        recGoalLoader.deleteCandidatesExt(uid,gid);
     }
+
 
     private void handleVeryCard(MessageExt msg)
     {
@@ -128,37 +102,25 @@ public class FeelListener implements MessageListenerConcurrently {
         Long card_id = (Long)very.get("card_id");
         if(uid == null || card_id ==null)
             return;
-
         //log.info("{}:{}", uid, card_id);
 
-        if(recCardLoader.hasLoadToCache(uid))
-        {
-            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-            recCardLoader.deleteCandidates(uid,card_id);
-        }
-        else
-        {
+        recCardLoader.deleteCandidatesExt(uid,card_id);
 
-            boolean hasLoad = recCardLoader.loadToCache(uid);
-            if(hasLoad)//
-            {
-                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                recCardLoader.deleteCandidates(uid,card_id);
-            }
-        }
+        JoinedGoalCardLoader.deleteCandidatesExt(uid,card_id);
 
-        if(JoinedGoalCardLoader.hasLoadToCache(uid))
+        similarUserCardLoader.deleteCandidatesExt(uid,card_id);
+
+        Map card = cardService.findCardById(card_id);
+        List<Map> tags = (List<Map>)card.get("tags");
+        if(tags!=null&&!tags.isEmpty())
         {
-            //log.info("del rec user 1-follower:{},leader:{}",follower,leader);
-            JoinedGoalCardLoader.deleteCandidates(uid,card_id);
-        }
-        else
-        {
-            boolean hasLoad = JoinedGoalCardLoader.loadToCache(uid);
-            if(hasLoad)//
+            for(Map tag : tags)
             {
-                //log.info("del rec user 2-follower:{},leader:{}",follower,leader);
-                JoinedGoalCardLoader.deleteCandidates(uid,card_id);
+                Long bid = (Long)tag.get("bid");
+                if(bid==null)
+                    continue;
+
+                similarTagCardLoader.deleteCandidatesExt(bid, card_id);
             }
         }
 
