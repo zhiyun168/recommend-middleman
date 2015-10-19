@@ -122,7 +122,7 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
             {
                 List<String> cards = getCandidates(id, page, size);
                 res.addAll(cards);
-                size = pageSizePerId+(pageSizePerId-cards.size());
+                size = pageSizePerId+(size-cards.size());
             }
             return res;
         }
