@@ -109,11 +109,16 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
         }
         else
         {
+            if(idCount > pageSize)
+            {
+                idCount = pageSize;
+            }
+
             int pageSizePerId = pageSize / idCount;
             int rem = pageSize - idCount * pageSizePerId;
             List<String> res = new ArrayList<>(pageSize);
             int size = pageSizePerId + rem;
-            for(Long id : ids)
+            for(Long id : ids.subList(0, idCount))
             {
                 List<String> cards = getCandidates(id, page, size);
                 res.addAll(cards);
@@ -121,6 +126,14 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
             }
             return res;
         }
+    }
+
+    public static void main(String[] args) {
+        int page = 1;
+        int pageSize =3;
+        int pageSizePerId = pageSize / 5;
+        int rem = pageSize - 5 * pageSizePerId;
+        int a =5;
     }
 
 
