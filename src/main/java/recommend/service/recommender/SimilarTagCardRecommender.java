@@ -128,13 +128,4 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
         }
     }
 
-    public static void main(String[] args) {
-        int page = 1;
-        int pageSize =3;
-        int pageSizePerId = pageSize / 5;
-        int rem = pageSize - 5 * pageSizePerId;
-        int a =5;
-    }
-
-
 }
