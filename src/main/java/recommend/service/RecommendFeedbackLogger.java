@@ -28,11 +28,21 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
     private RecGoalLoader recGoalLoader;
     @Autowired
     private RecTagLoader recTagLoader;
+    @Autowired
+    private SimilarTagCardLoader similarTagCardLoader;
+    @Autowired
+    private SimilarUserCardLoader similarUserCardLoader;
+
+
 
     private final static String USER = "user";
     private final static String CARD = "card";
     private final static String GOAL = "goal";
     private final static String TAG = "tag";
+
+    private final static String SIMILAR_USER_CARD = "similar_user_card";
+    private final static String SIMILAR_TAG_CARD = "similar_tag_card";
+
 
 
     private Loader selectLoader(String type)
@@ -40,7 +50,7 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
         Loader loader = null;
         if(USER.equals(type))
         {
-            loader = recUserLoader;
+            loader = recUserLoader;;
         }
         else if(CARD.equals(type))
         {
@@ -53,6 +63,14 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
         else if(TAG.equals(type))
         {
             loader = recTagLoader;
+        }
+        else if(SIMILAR_USER_CARD.equals(type))
+        {
+            loader = similarUserCardLoader;
+        }
+        else if(SIMILAR_TAG_CARD.equals(type))
+        {
+            loader = similarTagCardLoader;
         }
 
         return loader;

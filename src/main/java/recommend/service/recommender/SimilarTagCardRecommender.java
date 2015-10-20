@@ -58,7 +58,7 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
                 candidate = loadFromStorage(id, page, pageSize);
         }
 
-        recommendFeedbackLogger.view("similar_user_card",id.toString(), candidate);
+        recommendFeedbackLogger.view("similar_tag_card",id.toString(), candidate);
         return candidate;
     }
 
