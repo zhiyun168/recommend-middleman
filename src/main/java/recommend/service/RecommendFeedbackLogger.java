@@ -116,7 +116,7 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
     }
 
 
-    public void view_(String type, String uid, Collection<String> itemIds) {
+    private void view_(String type, String uid, Collection<String> itemIds) {
 
         if(Strings.isNullOrEmpty(uid)|| itemIds == null || itemIds.isEmpty())
             return;
@@ -130,6 +130,23 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
             log.info(JsonSerializer.serializeAsString(data));
         }
     }
+
+    public void view(IBaseLoader loader, String uid, Collection<String> itemIds) {
+
+        if(Strings.isNullOrEmpty(uid)|| itemIds == null || itemIds.isEmpty())
+            return;
+
+        if(loader!=null)
+        {
+            String name = loader.getEsIndexName();
+            String sub_type = loader.getEsType();
+            Data data = new Data(name, sub_type, uid, itemIds,
+                    "view");
+            log.info(JsonSerializer.serializeAsString(data));
+        }
+    }
+
+
 
     class Data{
         private String type;

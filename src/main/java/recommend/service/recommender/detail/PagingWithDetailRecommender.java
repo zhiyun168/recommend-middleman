@@ -63,8 +63,9 @@ public abstract class PagingWithDetailRecommender implements ApplicationContextA
                 candidate = loadFromStorage(id, page, pageSize);
         }
 
-        recommendFeedbackLogger.view_("joined_goal_card_with_detail", id.toString(), candidate.keySet());
+        recommendFeedbackLogger.view(withReasonLoader, id.toString(), candidate.keySet());
         return candidate;
+
     }
 
     public Map<String,String> loadFromCache(Long id, int page, int pageSize)

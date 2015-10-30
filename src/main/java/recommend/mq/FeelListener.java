@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import recommend.service.loader.*;
 import recommend.service.loader.detail.JoinedGoalCardWithDetailLoader;
+import recommend.service.loader.detail.RecCardWithDetailLoader;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -35,6 +36,8 @@ public class FeelListener implements MessageListenerConcurrently {
     private RecGoalLoader recGoalLoader;
     @Autowired
     private RecCardLoader recCardLoader;
+    @Autowired
+    private RecCardWithDetailLoader recCardWithDetailLoader;
     @Autowired
     private JoinedGoalCardLoader joinedGoalCardLoader;
     @Autowired
@@ -107,9 +110,9 @@ public class FeelListener implements MessageListenerConcurrently {
         //log.info("{}:{}", uid, card_id);
 
         recCardLoader.deleteCandidatesExt(uid,card_id);
+        recCardWithDetailLoader.deleteCandidatesExt(uid,card_id);
 
         joinedGoalCardLoader.deleteCandidatesExt(uid,card_id);
-
         joinedGoalCardWithDetailLoader.deleteCandidatesExt(uid, card_id);
 
         similarUserCardLoader.deleteCandidatesExt(uid,card_id);

@@ -1,6 +1,6 @@
 package recommend.service.recommender.detail;
 
-import com.zhiyun168.service.api.recommend.IJoinedGoalCardWithDetailRecommender;
+import com.zhiyun168.service.api.recommend.detail.IJoinedGoalCardWithDetailRecommender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

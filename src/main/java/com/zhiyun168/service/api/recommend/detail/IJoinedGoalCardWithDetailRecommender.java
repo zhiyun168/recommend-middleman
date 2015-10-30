@@ -1,4 +1,4 @@
-package com.zhiyun168.service.api.recommend;
+package com.zhiyun168.service.api.recommend.detail;
 
 import java.util.List;
 import java.util.Map;
