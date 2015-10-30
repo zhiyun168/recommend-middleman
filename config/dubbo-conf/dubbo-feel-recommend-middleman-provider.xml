@@ -42,4 +42,6 @@
 
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ISimilarTagCardRecommender" ref="similarTagCardRecommender" />
 
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IJoinedGoalCardWithDetailRecommender" ref="joinedGoalCardWithDetailRecommender" />
+
 </beans>

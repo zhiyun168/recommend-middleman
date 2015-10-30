@@ -1,5 +1,6 @@
 package recommend.service.recommender;
 
+import com.zhiyun168.model.recommend.Candidate;
 import com.zhiyun168.service.api.recommend.IJoinedGoalCardRecommender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,8 @@ import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.service.RecommendFeedbackLogger;
-import recommend.service.loader.Loader;
+import recommend.service.loader.detail.WithReasonLoader;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +25,10 @@ public class JoinedGoalCardRecommender implements IJoinedGoalCardRecommender{
     private static Logger log = LoggerFactory.getLogger(JoinedGoalCardRecommender.class);
 
     @Autowired
-    @Qualifier("joinedGoalCardLoader")
-    private Loader loader;
+    @Qualifier("joinedGoalCardWithDetailLoader")
+    private WithReasonLoader loader;
+
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -74,12 +78,12 @@ public class JoinedGoalCardRecommender implements IJoinedGoalCardRecommender{
 
     public List<String> loadFromStorage(Long uid, int page, int pageSize)
     {
-        List<String> rec = loader.getCandidatesFromStorage(uid);
+        Candidate candidate = loader.getCandidatesFromStorage(uid);
 
         //过滤推荐用户
-        List<String> filtratedRec = loader.filter(rec, uid);
+        Candidate filtratedRec = loader.filter(candidate, uid);
 
-        return loadFromList(filtratedRec, page, pageSize);
+        return loadFromList(filtratedRec.getItems(), page, pageSize);
     }
 
     private List<String> loadFromList(List<String> list, int page, int pageSize)
