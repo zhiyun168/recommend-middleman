@@ -1,6 +1,7 @@
-package recommend.service.loader;
+package recommend.service.loader.detail;
 
 import com.google.common.base.Preconditions;
+import com.zhiyun168.model.recommend.Candidate;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -12,36 +13,32 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.TimeoutUtils;
 import recommend.redis.RedisTemplatePlus;
 import recommend.service.SearchClientService;
+import recommend.service.loader.IBaseLoader;
+import recommend.service.loader.KeyBuilder;
 import recommend.utils.StringHelper;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ouduobiao on 15/7/20.
  */
-public abstract class Loader implements IBaseLoader, ApplicationContextAware {
+public abstract class WithReasonLoader extends KeyBuilder implements ApplicationContextAware, IBaseLoader {
 
-    protected static Logger log = LoggerFactory.getLogger(Loader.class);
+    protected static Logger log = LoggerFactory.getLogger(WithReasonLoader.class);
     private static int TIMEOUT = 7;
 
     protected StringRedisTemplate stringRedisTemplate;
-
     protected SearchClientService searchClientService;
 
-    public abstract String recKey(Long id);
-    public abstract String recTmpKey(Long id);
-    public abstract String recLoadKey();
-    public abstract String recLockKey(Long id);
-
-    @Override
-    public String getEsIndexName(){
-        return "recommendation";
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -59,6 +56,7 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
     {
         String recKey = recKey(id);
         stringRedisTemplate.opsForList().remove(recKey, 0, recId.toString());
+        //没必要删除推荐理由
     }
 
 
@@ -87,7 +85,7 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
      * @param id
      * @return
      */
-    public  List<String> filter(List<String> rec, Long id)
+    public  Candidate filter(Candidate rec, Long id)
     {
         return rec;
     }
@@ -118,12 +116,12 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
      *加载推荐目标id的推荐任务进cache
      * @param id
      */
-    public boolean loadToCache(Long id)
+    public boolean loadToCache(final Long id)
     {
         Preconditions.checkNotNull(id, "id不可空");
 
-        String lockKey = recLockKey(id);
-        String loadTime = String.valueOf(System.currentTimeMillis());
+        String lockKey = recLoadLockKey(id);
+        final String loadTime = String.valueOf(System.currentTimeMillis());
 
         boolean ok=false;
         boolean isLock = RedisTemplatePlus.set(stringRedisTemplate,
@@ -135,25 +133,40 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
             //获取加载锁，从es加载进redis
             try {
                 //log.info("start to load:" + uid.toString());
-                List<String> rec = getCandidatesFromStorage(id);
+                Candidate recWithReason = getCandidatesFromStorage(id);
 
                 //过滤推荐
-                List<String> filtratedRec = filter(rec, id);
+                final Candidate filtratedRec = filter(recWithReason, id);
 
-                String recKey = recKey(id);
-                if(!filtratedRec.isEmpty())
-                {
-                    String tmpRecKey = recTmpKey(id);
-                    stringRedisTemplate.opsForList().rightPushAll(tmpRecKey, filtratedRec);
-                    stringRedisTemplate.expire(tmpRecKey, TIMEOUT, TimeUnit.DAYS);
-                    stringRedisTemplate.rename(tmpRecKey, recKey);
-                }
-                else {
-                    stringRedisTemplate.delete(recKey);
-                }
+                stringRedisTemplate.execute(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        StringRedisConnection conn = (StringRedisConnection) connection;
+                        String recKey = recKey(id);
+                        String recReasonKey = recReasonKey(id);
+                        List<String> items = filtratedRec.getItems();
+                        if(!items.isEmpty())
+                        {
+                            long exp = TimeoutUtils.toMillis(TIMEOUT, TimeUnit.DAYS);
 
-                stringRedisTemplate.opsForHash().put(recLoadKey(),
-                        id.toString(), loadTime);
+                            String tmpRecKey = recTmpKey(id);
+                            conn.rPush(tmpRecKey, items.toArray(new String[items.size()]));
+                            conn.expire(tmpRecKey, exp);
+                            conn.rename(tmpRecKey, recKey);
+
+                            String tmpRecReasonKey = recReasonTmpKey(id);
+                            conn.hMSet(tmpRecReasonKey, filtratedRec.getItemReason());
+                            conn.expire(tmpRecReasonKey, exp);
+                            conn.rename(tmpRecReasonKey, recReasonKey);
+                        }
+                        else {
+                            conn.del(recKey, recReasonKey);
+                        }
+
+                        conn.hSet(recLoadKey(), id.toString(), loadTime);
+                        return null;
+                    }
+                },true,true);
 
                 afterLoad(id);
 
@@ -178,7 +191,7 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
      * @param id
      * @return
      */
-    public List<String> getCandidatesFromStorage(Long id)
+    public Candidate getCandidatesFromStorage(Long id)
     {
         Preconditions.checkNotNull(id, "id不可空");
         Client client = searchClientService.getSearchClient();
@@ -194,15 +207,34 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
 
         if(hitList.length > 0)
         {
-            Object res = hitList[0].getSource().get("candidates");
+            List<String> res = (List<String>)hitList[0].getSource().get("candidates");
             if(res == null)
-                return Collections.EMPTY_LIST;
+            {
+                return new Candidate();
+            }
             else
-                return (List<String>)res;
+            {
+                List<String> items = new ArrayList<>(res.size());
+                Map<String,String> itemReason = new HashMap<>(res.size());
+                for(String item_reason : res)
+                {
+                    String[] split = item_reason.split(":");
+                    try {
+                        String item = split[0].trim();
+                        String reason = split[1].trim();
+                        items.add(item);
+                        itemReason.put(item, reason);
+                    }
+                    catch (Exception e)
+                    {
+                        log.error("获取推荐Item与Reason失败", e);
+                    }
+                }
+                return new Candidate(items, itemReason);
+            }
+
         }
         else
-            return Collections.EMPTY_LIST;
+            return new Candidate();
     }
-
-
 }

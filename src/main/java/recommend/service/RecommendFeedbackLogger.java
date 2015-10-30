@@ -6,9 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.zhiyun168.service.api.recommend.IRecommendFeedbackLogger;
 import org.springframework.stereotype.Service;
+import recommend.service.loader.IBaseLoader;
 import recommend.service.loader.*;
 import recommend.utils.JsonSerializer;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,9 +47,9 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
 
 
 
-    private Loader selectLoader(String type)
+    private IBaseLoader selectLoader(String type)
     {
-        Loader loader = null;
+        IBaseLoader loader = null;
         if(USER.equals(type))
         {
             loader = recUserLoader;;
@@ -82,7 +84,7 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
         if(Strings.isNullOrEmpty(id)|| Strings.isNullOrEmpty(itemId))
             return;
 
-        Loader loader = selectLoader(type);
+        IBaseLoader loader = selectLoader(type);
         if(loader!=null)
         {
             String sub_type = loader.getEsType();
@@ -97,7 +99,7 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
         if(Strings.isNullOrEmpty(uid)|| Strings.isNullOrEmpty(itemId))
             return;
 
-        Loader loader = selectLoader(type);
+        IBaseLoader loader = selectLoader(type);
         if(loader!=null)
         {
             String sub_type = loader.getEsType();
@@ -110,11 +112,16 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
 
     @Override
     public void view(String type, String uid, List<String> itemIds) {
+        view_(type, uid, itemIds);
+    }
+
+
+    public void view_(String type, String uid, Collection<String> itemIds) {
 
         if(Strings.isNullOrEmpty(uid)|| itemIds == null || itemIds.isEmpty())
             return;
 
-        Loader loader = selectLoader(type);
+        IBaseLoader loader = selectLoader(type);
         if(loader!=null)
         {
             String sub_type = loader.getEsType();
@@ -122,19 +129,17 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
                     "view");
             log.info(JsonSerializer.serializeAsString(data));
         }
-
     }
-
 
     class Data{
         private String type;
         private String sub_type;
         private String id;
-        private List<String> candidates;
+        private Collection<String> candidates;
         private String action;
         private long created;
 
-        public Data(String type, String sub_type, String id, List<String> candidates, String action) {
+        public Data(String type, String sub_type, String id, Collection<String> candidates, String action) {
             this.type = type;
             this.sub_type = sub_type;
             this.id = id;
@@ -167,7 +172,7 @@ public class RecommendFeedbackLogger implements IRecommendFeedbackLogger {
             this.id = id;
         }
 
-        public List<String> getCandidates() {
+        public Collection<String> getCandidates() {
             return candidates;
         }
 

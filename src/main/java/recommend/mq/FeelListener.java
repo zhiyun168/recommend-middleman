@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import recommend.service.loader.*;
-import recommend.service.recommender.JoinedGoalCardRecommender;
+import recommend.service.loader.detail.JoinedGoalCardWithDetailLoader;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -36,7 +36,9 @@ public class FeelListener implements MessageListenerConcurrently {
     @Autowired
     private RecCardLoader recCardLoader;
     @Autowired
-    private JoinedGoalCardLoader JoinedGoalCardLoader;
+    private JoinedGoalCardLoader joinedGoalCardLoader;
+    @Autowired
+    private JoinedGoalCardWithDetailLoader joinedGoalCardWithDetailLoader;
 
     @Autowired
     private SimilarTagCardLoader similarTagCardLoader;
@@ -106,7 +108,9 @@ public class FeelListener implements MessageListenerConcurrently {
 
         recCardLoader.deleteCandidatesExt(uid,card_id);
 
-        JoinedGoalCardLoader.deleteCandidatesExt(uid,card_id);
+        joinedGoalCardLoader.deleteCandidatesExt(uid,card_id);
+
+        joinedGoalCardWithDetailLoader.deleteCandidatesExt(uid, card_id);
 
         similarUserCardLoader.deleteCandidatesExt(uid,card_id);
 
