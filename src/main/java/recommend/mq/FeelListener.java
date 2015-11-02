@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import recommend.service.loader.*;
 import recommend.service.loader.detail.JoinedGoalCardWithDetailLoader;
 import recommend.service.loader.detail.RecCardWithDetailLoader;
+import recommend.service.loader.detail.SimilarUserCardWithDetailLoader;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -47,6 +48,8 @@ public class FeelListener implements MessageListenerConcurrently {
     private SimilarTagCardLoader similarTagCardLoader;
     @Autowired
     private SimilarUserCardLoader similarUserCardLoader;
+    @Autowired
+    private SimilarUserCardWithDetailLoader similarUserCardWithDetailLoader;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -116,6 +119,7 @@ public class FeelListener implements MessageListenerConcurrently {
         joinedGoalCardWithDetailLoader.deleteCandidatesExt(uid, card_id);
 
         similarUserCardLoader.deleteCandidatesExt(uid,card_id);
+        similarUserCardWithDetailLoader.deleteCandidatesExt(uid,card_id);
 
         Map card = cardService.findCardById(card_id);
         List<Map> tags = (List<Map>)card.get("tags");

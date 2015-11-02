@@ -51,4 +51,11 @@ public abstract class KeyBuilder {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(recName), "推荐业务名不可空");
         return StringHelper.DotJoiner.join("feel:rec", recName, "load:lock",id);
     }
+
+    public static String  recLoadKey(String recName)
+    {
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(recName), "推荐业务名不可空");
+        return StringHelper.DotJoiner.join("feel:rec", recName, "load");
+    }
+
 }

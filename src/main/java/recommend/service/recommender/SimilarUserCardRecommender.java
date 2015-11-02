@@ -1,5 +1,6 @@
 package recommend.service.recommender;
 
+import com.zhiyun168.model.recommend.Candidate;
 import com.zhiyun168.service.api.recommend.ISimilarUserCardRecommender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import recommend.service.RecommendFeedbackLogger;
 import recommend.service.loader.Loader;
+import recommend.service.loader.detail.WithReasonLoader;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +25,9 @@ public class SimilarUserCardRecommender implements ISimilarUserCardRecommender{
     private static Logger log = LoggerFactory.getLogger(SimilarUserCardRecommender.class);
 
     @Autowired
-    @Qualifier("similarUserCardLoader")
-    private Loader loader;
+    @Qualifier("similarUserCardWithDetailLoader")
+    private WithReasonLoader loader;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -74,12 +77,12 @@ public class SimilarUserCardRecommender implements ISimilarUserCardRecommender{
 
     public List<String> loadFromStorage(Long uid, int page, int pageSize)
     {
-        List<String> rec = loader.getCandidatesFromStorage(uid);
+        Candidate rec = loader.getCandidatesFromStorage(uid);
 
         //过滤推荐
-        List<String> filtratedRec = loader.filter(rec, uid);
+        Candidate filtratedRec = loader.filter(rec, uid);
 
-        return loadFromList(filtratedRec, page, pageSize);
+        return loadFromList(filtratedRec.getItems(), page, pageSize);
     }
 
     private List<String> loadFromList(List<String> list, int page, int pageSize)

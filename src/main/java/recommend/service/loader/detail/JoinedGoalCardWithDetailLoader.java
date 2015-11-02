@@ -16,7 +16,7 @@ public class JoinedGoalCardWithDetailLoader extends WithReasonLoader {
     private static String ES_Type = "CARD";
     private static String ES_ID_FIELD = "user";
 
-    private static String REC_NAME = "joined_goal_card_with_detail";
+    public static String REC_NAME = "joined_goal_card_with_detail";
 
     @Override
     public String recName() {

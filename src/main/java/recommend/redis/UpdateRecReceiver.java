@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import recommend.service.loader.KeyBuilder;
+import recommend.service.loader.detail.JoinedGoalCardWithDetailLoader;
+import recommend.service.loader.detail.RecCardWithDetailLoader;
+import recommend.service.loader.detail.SimilarUserCardWithDetailLoader;
 import recommend.utils.CacheKeyHelper;
 
 /**
@@ -64,6 +68,18 @@ public class UpdateRecReceiver {
                 else if("SIMILAR_USER_CARD".equals(msg))
                 {
                     updateSimilarUserCard();
+                }
+                else if("CARD_WITH_DETAIL".equals(msg))
+                {
+                    stringRedisTemplate.delete(KeyBuilder.recLoadKey(RecCardWithDetailLoader.REC_NAME));
+                }
+                else if("JOINED_SAME_GOAL_USER_CARD_WITH_DETAIL".equals(msg))
+                {
+                    stringRedisTemplate.delete(KeyBuilder.recLoadKey(JoinedGoalCardWithDetailLoader.REC_NAME));
+                }
+                else if("SIMILAR_USER_CARD_WITH_DETAIL".equals(msg))
+                {
+                    stringRedisTemplate.delete(KeyBuilder.recLoadKey(SimilarUserCardWithDetailLoader.REC_NAME));
                 }
                 else
                 {
