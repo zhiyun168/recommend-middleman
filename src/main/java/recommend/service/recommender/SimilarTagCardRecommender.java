@@ -150,7 +150,7 @@ public class SimilarTagCardRecommender implements ISimilarTagCardRecommender{
                 String brandId = id.toString();
                 for(String cardId : cards)
                 {
-                    res.put(brandId, cardId);
+                    res.put(cardId, brandId);
                 }
                 size = pageSizePerId+(size-cards.size());
             }
