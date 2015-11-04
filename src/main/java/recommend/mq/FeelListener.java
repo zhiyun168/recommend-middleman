@@ -122,6 +122,9 @@ public class FeelListener implements MessageListenerConcurrently {
         similarUserCardWithDetailLoader.deleteCandidatesExt(uid,card_id);
 
         Map card = cardService.findCardById(card_id);
+        if(card == null)
+            return;
+        
         List<Map> tags = (List<Map>)card.get("tags");
         if(tags!=null&&!tags.isEmpty())
         {
