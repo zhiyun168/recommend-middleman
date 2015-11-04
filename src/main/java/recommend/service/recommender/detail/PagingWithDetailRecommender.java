@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import recommend.service.RecommendFeedbackLogger;
+import recommend.service.logger.RecommendFeedbackLogger;
 import recommend.service.loader.detail.WithReasonLoader;
 
 

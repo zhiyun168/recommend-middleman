@@ -37,11 +37,42 @@
             </rollingPolicy>
         </appender>
 
-        <logger name="recommend.service.RecommendFeedbackLogger" level="info" additivity="false">
+        <logger name="recommend.service.logger.RecommendFeedbackLogger" level="info" additivity="false">
             <appender-ref ref="FEEDBACK"/>
         </logger>
 
-    <root level="info">
+
+        <appender name="LIKE_OR_DISLIKE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/recommend-middleman/feel/like-or-dislike.log</file>
+            <encoder>
+                <pattern>%msg%n</pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.S3TimeBasedRollingPolicy">
+                <!-- Rollover every minute -->
+                <fileNamePattern>/data/recommend-middleman/feel/%d{yyyy-MM-dd,aux}/like-or-dislike.%d{HH-mm}.%i.log</fileNamePattern>
+                <awsAccessKey>AKIAP7A6NA2HRIN6RCXQ</awsAccessKey>
+                <awsSecretKey>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</awsSecretKey>
+                <s3Endpoint>s3.cn-north-1.amazonaws.com.cn</s3Endpoint>
+                <s3BucketName>feel.like-or-dislike.log</s3BucketName>
+                <s3FolderName>feel/%d{yyyy-MM-dd}</s3FolderName>
+                <rolloverOnExit>true</rolloverOnExit>
+                <shutdownHookType>JVM_SHUTDOWN_HOOK</shutdownHookType>
+                <prefixTimestamp>false</prefixTimestamp>
+                <prefixIdentifier>true</prefixIdentifier>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+        </appender>
+
+        <logger name="recommend.service.logger.LikeOrDislikeLogger" level="info" additivity="false">
+            <appender-ref ref="LIKE_OR_DISLIKE"/>
+        </logger>
+
+
+        <root level="info">
         <appender-ref ref="FILE" />
     </root>
 

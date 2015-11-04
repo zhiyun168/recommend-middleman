@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import recommend.service.RecommendFeedbackLogger;
-import recommend.service.loader.Loader;
+import recommend.service.logger.RecommendFeedbackLogger;
 import recommend.service.loader.detail.WithReasonLoader;
 
 import java.util.Collections;
