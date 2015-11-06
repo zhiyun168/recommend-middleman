@@ -61,5 +61,7 @@
 
     <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.logger.ILikeOrDislikeLogger" ref="likeOrDislikeLogger" />
 
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.ISimilarTagCardWithDetailRecommender" ref="similarTagCardWithDetailRecommender" />
+
 
 </beans>

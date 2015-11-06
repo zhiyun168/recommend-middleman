@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import recommend.service.loader.KeyBuilder;
 import recommend.service.loader.detail.JoinedGoalCardWithDetailLoader;
 import recommend.service.loader.detail.RecCardWithDetailLoader;
+import recommend.service.loader.detail.SimilarTagCardWithDetailLoader;
 import recommend.service.loader.detail.SimilarUserCardWithDetailLoader;
 import recommend.utils.CacheKeyHelper;
 
@@ -80,6 +81,10 @@ public class UpdateRecReceiver {
                 else if("SIMILAR_USER_CARD_WITH_DETAIL".equals(msg))
                 {
                     stringRedisTemplate.delete(KeyBuilder.recLoadKey(SimilarUserCardWithDetailLoader.REC_NAME));
+                }
+                else if("SIMILAR_TAG_CARD_WITH_DETAIL".equals(msg))
+                {
+                    stringRedisTemplate.delete(KeyBuilder.recLoadKey(SimilarTagCardWithDetailLoader.REC_NAME));
                 }
                 else
                 {
