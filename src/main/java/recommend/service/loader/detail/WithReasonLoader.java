@@ -218,7 +218,7 @@ public abstract class WithReasonLoader extends KeyBuilder implements Application
                 Map<String,String> itemReason = new HashMap<>(res.size());
                 for(String item_reason : res)
                 {
-                    String[] split = item_reason.split(":");
+                    String[] split = item_reason.split(":",2);
                     try {
                         String item = split[0].trim();
                         String reason = split[1].trim();
