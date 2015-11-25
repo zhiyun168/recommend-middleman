@@ -7,6 +7,6 @@ import java.util.Map;
  */
 public interface INearbyCardRecommender {
 
-    Map<String, String> getCandidates(Long uid, int maxSize);
+    Map<String, String> getCandidates(Long uid, int page, int pageSize);
 
 }

@@ -9,10 +9,10 @@ import java.util.Map;
  * Created by ouduobiao on 15/10/30.
  */
 @Service
-public class NearbyCardRecommender extends RandomWithDetailRecommender implements INearbyCardRecommender {
+public class NearbyCardRecommender extends PagingWithDetailRecommender implements INearbyCardRecommender {
     @Override
-    public Map<String, String> getCandidates(Long uid, int maxSize) {
-        return getCandidates_(uid, maxSize);
+    public Map<String, String> getCandidates(Long uid, int page, int pageSize) {
+        return getCandidates_(uid, page, pageSize);
     }
 
     @Override
