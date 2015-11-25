@@ -63,5 +63,11 @@
 
     <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.ISimilarTagCardWithDetailRecommender" ref="similarTagCardWithDetailRecommender" />
 
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.IGenderGoalWithDetailRecommender" ref="genderGoalWithDetailRecommender" />
+
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.IGoalCommonUserGoalWithDetailRecommender" ref="goalCommonUserGoalWithDetailRecommender" />
+
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.INearbyCardRecommender" ref="nearbyCardRecommender" />
+
 
 </beans>

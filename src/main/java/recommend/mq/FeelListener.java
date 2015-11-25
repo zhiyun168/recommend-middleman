@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import recommend.service.loader.*;
-import recommend.service.loader.detail.JoinedGoalCardWithDetailLoader;
-import recommend.service.loader.detail.RecCardWithDetailLoader;
-import recommend.service.loader.detail.SimilarTagCardWithDetailLoader;
-import recommend.service.loader.detail.SimilarUserCardWithDetailLoader;
+import recommend.service.loader.detail.*;
 import recommend.utils.ObjectUtil;
 
 import java.util.List;
@@ -53,6 +50,14 @@ public class FeelListener implements MessageListenerConcurrently {
     private SimilarUserCardWithDetailLoader similarUserCardWithDetailLoader;
     @Autowired
     private SimilarTagCardWithDetailLoader similarTagCardWithDetailLoader;
+
+    @Autowired
+    private GenderGoalWithDetailLoader genderGoalWithDetailLoader;
+    @Autowired
+    private GoalCommonUserGoalWithDetailLoader goalCommonUserGoalWithDetailLoader;
+
+    @Autowired
+    private NearbyCardLoader nearbyCardLoader;
 
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -101,6 +106,9 @@ public class FeelListener implements MessageListenerConcurrently {
         Long gid = Long.valueOf(gid_uid[0]);
 
         recGoalLoader.deleteCandidatesExt(uid,gid);
+
+        genderGoalWithDetailLoader.deleteCandidatesExt(uid,gid);
+        goalCommonUserGoalWithDetailLoader.deleteCandidates(uid,gid);
     }
 
 
@@ -123,6 +131,8 @@ public class FeelListener implements MessageListenerConcurrently {
 
         similarUserCardLoader.deleteCandidatesExt(uid,card_id);
         similarUserCardWithDetailLoader.deleteCandidatesExt(uid,card_id);
+        nearbyCardLoader.deleteCandidatesExt(uid,card_id);
+
 
         Map card = cardService.findCardById(card_id);
         if(card == null)
