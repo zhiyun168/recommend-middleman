@@ -95,6 +95,14 @@ public class UpdateRecReceiver {
                 {
                     stringRedisTemplate.delete(KeyBuilder.recLoadKey(NearbyCardLoader.REC_NAME));
                 }
+                else if("USER_SPORTS".equals(msg))
+                {
+                    stringRedisTemplate.delete("");
+                }
+                else if ("USER_REPORT".equals(msg))
+                {
+                    stringRedisTemplate.delete("");
+                }
                 else
                 {
                     log.warn("未知更新消息："+msg);

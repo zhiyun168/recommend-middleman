@@ -45,6 +45,10 @@ public class CacheKeyHelper {
     public static final String REC_SIMILAR_USER_CARD_LOAD_KEY = "feel:rec:similar:user:card:load";
 
 
+    public static final String HEALTH_USER_SPORTS = "feel:health:sports";
+    public static final String HEALTH_USER_REPORT = "feel:health:report";
+
+
     /**
      * 加载用户的推荐用户到cache的key
      * @param uid
@@ -208,7 +212,13 @@ public class CacheKeyHelper {
         return StringHelper.DotJoiner.join(REC_SIMILAR_USER_CARD_LOAD_LOCK_KEY_PREFIX, id);
     }
 
+    public static String healthUserReport(Long id) {
+        return StringHelper.DotJoiner.join(HEALTH_USER_REPORT, id);
+    }
 
+    public static String healthUserSports(Long id) {
+        return StringHelper.DotJoiner.join(HEALTH_USER_SPORTS, id);
+    }
 
     /**
      * memcached key section
