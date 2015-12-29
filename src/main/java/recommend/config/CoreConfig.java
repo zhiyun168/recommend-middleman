@@ -20,6 +20,7 @@ import recommend.mq.FeelListener;
  */
 @Configuration
 @ImportResource( { "classpath*:/spring-context.xml",
+        "classpath*:/simplesm-xmemcached.xml",
         "classpath*:/dubbo-conf/*.xml"
 } )
 public class CoreConfig {
