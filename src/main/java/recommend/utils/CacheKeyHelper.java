@@ -47,7 +47,7 @@ public class CacheKeyHelper {
 
     public static final String HEALTH_USER_SPORTS = "feel:health:sports";
     public static final String HEALTH_USER_REPORT = "feel:health:report";
-
+    public static final String HEALTH_USER_PLAN = "feel:health:plan";
 
     /**
      * 加载用户的推荐用户到cache的key
@@ -220,6 +220,7 @@ public class CacheKeyHelper {
         return StringHelper.DotJoiner.join(HEALTH_USER_SPORTS, id);
     }
 
+    public static String healthUserPlan(Long id) { return StringHelper.DotJoiner.join(HEALTH_USER_PLAN, id); }
     /**
      * memcached key section
      */

@@ -69,5 +69,5 @@
 
     <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.INearbyCardRecommender" ref="nearbyCardRecommender" />
 
-
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IHealthNoticeService" ref="healthNoticeService" />
 </beans>

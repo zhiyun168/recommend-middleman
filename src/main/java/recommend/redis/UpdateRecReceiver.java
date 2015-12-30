@@ -97,11 +97,15 @@ public class UpdateRecReceiver {
                 }
                 else if("USER_SPORTS".equals(msg))
                 {
-                    stringRedisTemplate.delete("");
+                    stringRedisTemplate.delete("feel_health_recommend_sports");
                 }
                 else if ("USER_REPORT".equals(msg))
                 {
-                    stringRedisTemplate.delete("");
+                    stringRedisTemplate.delete("feel_health_report_body");
+                }
+                else if ("USER_PLAN".equals(msg))
+                {
+                    stringRedisTemplate.delete("feel_health_recommend_userstepplan");
                 }
                 else
                 {
