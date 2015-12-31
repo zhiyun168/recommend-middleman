@@ -1,11 +1,12 @@
 package recommend;
 
+import com.zhiyun168.service.api.recommend.IHealthNoticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-//import recommend.service.recommender.TagRecommender;
+
 
 
 import java.util.Arrays;
@@ -28,6 +29,7 @@ public class RecommendMiddlemanApplication {
         for (String beanName : beanNames) {
             log.info(beanName);
         }
+
 
 
 
@@ -55,6 +57,8 @@ public class RecommendMiddlemanApplication {
         RTopic<String> topic =redisson.getTopic("recommendation");
         topic.addListener(listener);
         */
+        IHealthNoticeService healthNoticeService = ctx.getBean("ab", IHealthNoticeService.class);
+        System.out.println(healthNoticeService.getNoticeById(1088L, "GMT+8"));
 
         log.info("recommend middleman start!");
     }

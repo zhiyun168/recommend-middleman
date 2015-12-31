@@ -99,9 +99,17 @@ public class UpdateRecReceiver {
                 {
                     stringRedisTemplate.delete("feel_health_recommend_sports");
                 }
-                else if ("USER_REPORT".equals(msg))
+                else if ("USER_REPORT_BODY".equals(msg))
                 {
                     stringRedisTemplate.delete("feel_health_report_body");
+                }
+                else if ("USER_REPORT_STEP".equals(msg))
+                {
+                    stringRedisTemplate.delete("feel_health_report_step");
+                }
+                else if ("USER_REPORT_SLEEP".equals(msg))
+                {
+                    stringRedisTemplate.delete("feel_health_report_sleep");
                 }
                 else if ("USER_PLAN".equals(msg))
                 {
