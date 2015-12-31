@@ -105,11 +105,31 @@ public abstract class WithReasonLoader extends KeyBuilder implements Application
     public boolean hasLoadToCache(Long id)
     {
         Preconditions.checkNotNull(id, "id不可空");
-        String recKey = recKey(id);
         String loadKey = recLoadKey();
+        String loadTimeStr = (String)stringRedisTemplate.opsForHash().get(loadKey, id.toString());
 
-        return stringRedisTemplate.opsForHash().hasKey(loadKey, id.toString())
-                && stringRedisTemplate.hasKey(recKey);
+        if(loadTimeStr == null)//没有load key
+            return false;
+        else
+        {
+            long now = System.currentTimeMillis();
+            long endTime;
+            try
+            {
+                endTime = Long.parseLong(loadTimeStr) + TimeoutUtils.toMillis(TIMEOUT, TimeUnit.DAYS);
+            }
+            catch (Exception e)
+            {
+                log.error("获取时效时间失败", e);
+                return false;
+            }
+
+            if(now > endTime)//超过时效时间
+                return false;
+            else {
+                return true;
+            }
+        }
     }
 
     /**
@@ -151,12 +171,12 @@ public abstract class WithReasonLoader extends KeyBuilder implements Application
 
                             String tmpRecKey = recTmpKey(id);
                             conn.rPush(tmpRecKey, items.toArray(new String[items.size()]));
-                            conn.expire(tmpRecKey, exp);
+                            conn.pExpire(tmpRecKey, exp);
                             conn.rename(tmpRecKey, recKey);
 
                             String tmpRecReasonKey = recReasonTmpKey(id);
                             conn.hMSet(tmpRecReasonKey, filtratedRec.getItemReason());
-                            conn.expire(tmpRecReasonKey, exp);
+                            conn.pExpire(tmpRecReasonKey, exp);
                             conn.rename(tmpRecReasonKey, recReasonKey);
                         }
                         else {

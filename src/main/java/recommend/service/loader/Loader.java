@@ -13,6 +13,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.TimeoutUtils;
 import recommend.redis.RedisTemplatePlus;
 import recommend.service.SearchClientService;
 import recommend.utils.StringHelper;
@@ -107,11 +108,31 @@ public abstract class Loader implements IBaseLoader, ApplicationContextAware {
     public boolean hasLoadToCache(Long id)
     {
         Preconditions.checkNotNull(id, "id不可空");
-        String recKey = recKey(id);
         String loadKey = recLoadKey();
+        String loadTimeStr = (String)stringRedisTemplate.opsForHash().get(loadKey, id.toString());
 
-        return stringRedisTemplate.opsForHash().hasKey(loadKey, id.toString())
-                && stringRedisTemplate.hasKey(recKey);
+        if(loadTimeStr == null)//没有load key
+            return false;
+        else
+        {
+            long now = System.currentTimeMillis();
+            long endTime;
+            try
+            {
+                endTime = Long.parseLong(loadTimeStr) + TimeoutUtils.toMillis(TIMEOUT, TimeUnit.DAYS);
+            }
+            catch (Exception e)
+            {
+                log.error("获取时效时间失败", e);
+                return false;
+            }
+
+            if(now > endTime)//超过时效时间
+                return false;
+            else {
+                return true;
+            }
+        }
     }
 
     /**
