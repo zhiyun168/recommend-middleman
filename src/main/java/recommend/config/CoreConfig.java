@@ -20,23 +20,15 @@ import recommend.mq.FeelListener;
  */
 @Configuration
 @ImportResource( { "classpath*:/spring-context.xml",
-        "classpath*:/simplesm-xmemcached.xml",
         "classpath*:/dubbo-conf/*.xml"
 } )
 public class CoreConfig {
     private static Logger log = LoggerFactory.getLogger(CoreConfig.class);
 
-    @Value("${mq.consumer_group}")
-    private String consumerGroup;
-    @Value("${mq.name_server_addr}")
-    private String nameServerAddr;
-
-
-
-
-
     @Bean(initMethod = "start", destroyMethod = "shutdown")
-    public DefaultMQPushConsumer consumer(FeelListener feelListener) throws MQClientException {
+    public DefaultMQPushConsumer consumer(@Value("${mq.consumer_group}") String consumerGroup,
+                                          @Value("${mq.name_server_addr}") String nameServerAddr,
+                                          FeelListener feelListener) throws MQClientException {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(consumerGroup), "consumer_group值不存在");
         Preconditions.checkArgument(!Strings.isNullOrEmpty(nameServerAddr), "name_server_addr值不存在");
 

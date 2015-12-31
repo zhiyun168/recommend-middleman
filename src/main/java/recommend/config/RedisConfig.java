@@ -21,14 +21,8 @@ public class RedisConfig {
 
     private static Logger log = LoggerFactory.getLogger(RedisConfig.class);
 
-    @Value("${redis.address}")
-    private String address;
-    @Value("${redis.enable_cluster}")
-    private String enableCluster;
-
-
     @Bean
-    public RedisConnectionFactory redisConnectionFactory()
+    public RedisConnectionFactory redisConnectionFactory(@Value("${redis.address}") String address)
     {
         JedisConnectionFactory factory = new JedisConnectionFactory();
         log.info("redis address:" + address);
