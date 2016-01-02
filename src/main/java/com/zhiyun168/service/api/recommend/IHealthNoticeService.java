@@ -7,5 +7,5 @@ import java.util.Map;
  */
 public interface IHealthNoticeService {
 
-    Map getNoticeById(Long id, String timeZone);
+    Map getNoticeService(Long id, String timeZone);
 }

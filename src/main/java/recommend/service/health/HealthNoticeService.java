@@ -28,7 +28,8 @@ public class HealthNoticeService implements IHealthNoticeService {
     @Autowired
     private IUserService userService;
 
-    public Map getNoticeById(Long id, String timeZone) {
+    @Override
+    public Map getNoticeService(Long id, String timeZone) {
 
         try {
             int index = new Random().nextInt(typeSize);
