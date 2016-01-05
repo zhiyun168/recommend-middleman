@@ -1,5 +1,6 @@
 package recommend;
 
+import com.zhiyun168.service.api.recommend.IHealthNoticeService;
 import com.zhiyun168.service.api.recommend.detail.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,12 @@ public class RecommendMiddlemanApplication {
         for (String beanName : beanNames) {
             log.info(beanName);
         }
-        
+
+        IHealthNoticeService healthNoticeService = ctx.getBean("ab", IHealthNoticeService.class);
+        System.out.println(healthNoticeService.getNoticeService(1088L, "GMT+8"));
+
+
+
         log.info("recommend middleman start!");
     }
 }

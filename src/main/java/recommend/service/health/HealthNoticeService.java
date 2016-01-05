@@ -41,8 +41,9 @@ public class HealthNoticeService implements IHealthNoticeService {
                 List <String> candidateList = (List <String> )
                         ((HashMap <String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
                         .get("value")).get("candidates");
-                log.info(candidateList.toString());
-                tip.put("content", candidateList.get(new Random().nextInt(candidateList.size()))); //new Random().nextInt(content.size())));
+                tip.put("content", candidateList.get(new Random().nextInt(candidateList.size())));
+                tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
+                return tip;
             } else if (index == 1) {
                 User userProfile = userService.userProfile(id, null);
                 Integer stepsPlanTmp = userProfile.getExtension().getDaily_steps();
@@ -50,46 +51,78 @@ public class HealthNoticeService implements IHealthNoticeService {
                 if (stepsPlanTmp != null) {
                     stepsPlan = Double.valueOf(stepsPlanTmp.intValue());
                 }
-                List tmpContent = (List <List<?> >) ((HashMap<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
+                List planContent = (List <List<?> >) ((HashMap<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
                         .get("value")).get("stepPlan");
 
-                List content = new ArrayList();
-                for(int i = 0; i < tmpContent.size(); i++) {
-                    List<?> tmp = (List<?>) tmpContent.get(i);
-                    List<Integer> tmpValue = new ArrayList();
-                    Double hourStep = stepsPlan * ((Double) tmp.get(1));
-                    tmpValue.add(0, (Integer) tmp.get(0));
-                    tmpValue.add(1, hourStep.intValue());
-                    content.add(i, tmpValue);
+                Calendar cal  = Calendar.getInstance();
+                if (!Strings.isNullOrEmpty(timeZone)) {
+                    TimeZone tz = TimeZone.getTimeZone(timeZone);
+                    cal.setTimeZone(tz);
                 }
-                tip.put("content", content.toString());
+                Integer hour = Integer.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+                String content = "";
+                for (int i = 0; i < planContent.size(); i++) {
+                    List<?> tmp = (List<?>) planContent.get(i);
+                    Double hourStepTmp = stepsPlan * ((Double) tmp.get(1));
+
+                    Integer planHour = (Integer) tmp.get(0);
+                    if (planHour.equals(hour)) {
+                        Integer hourStep = hourStepTmp.intValue();
+                        content = "建议当前小时内走" + hourStep.toString() + "步，更容易达到今天的目标";
+                    }
+                }
+                if (!Strings.isNullOrEmpty(content)) {
+                    tip.put("content", content);
+                    return tip;
+                } else {
+                    return null;
+                }
             } else if (index == 2) {
                 User userProfile = userService.userProfile(id, null);
                 String gender = userProfile.getSex();
                 String birthday = userProfile.getBirthday();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy");
                 Integer age = -1;
-                log.info(birthday);
                 if (!Strings.isNullOrEmpty(birthday)) {
                     age = Integer.parseInt(df.format(new Date()))
                             - Integer.parseInt(birthday.substring(0, 4));
                 }
                 String key = gender + "\t" + age.toString();
-                Map<String, Object> result = new HashMap<>();
-
+                String content = "";
                 for (int i = 0; i < 3; i++) {
-                    Object content = esToMemCacheService.call(esIndex, esType, key).get("value");
                     esIndex = esIndexList.get(index + i);
                     esType = esTypeList.get(index + i);
-                    result.put(esType, content);
+
+                    Object valueContentObject = esToMemCacheService.call(esIndex, esType, key);
+
+                    if (null != valueContentObject) {
+                        if(!Collections.EMPTY_MAP.equals(((HashMap<String, Object>) valueContentObject).get("value"))) {
+                            Object valueContent = ((HashMap<String, Object>) ((HashMap<String, Object>)
+                                    valueContentObject).get("value")).get("value");
+                            if (i == 0) {
+                                content += "和你同性别同龄的人的平静体脂率为" + valueContent.toString() + "\n";
+                            } else if (i == 1) {
+                                Integer stepNumber = (Double.valueOf(valueContent.toString())).intValue();
+                                content += "和你同性别同年龄的人的平静步数为" + stepNumber.toString() + "步\n";
+                            } else if (i == 2) {
+                                String [] sleepInfo = valueContent.toString().split("\t");
+                                Integer shallowSleepNumber = (Double.valueOf(sleepInfo[0])).intValue();
+                                content += "和你同性别同年龄的人的平静浅度睡眠时间为" + shallowSleepNumber.toString() + "分钟\n";
+                                Integer deepSleepNumber = (Double.valueOf(sleepInfo[1])).intValue();
+                                content += "和你同性别同年龄的人的平静深度睡眠时间为" + deepSleepNumber.toString() + "分钟\n";
+                            }
+                        }
+                    }
                 }
-                tip.put("content", result);
+                if (!Strings.isNullOrEmpty(content)) {
+                    tip.put("content", content);
+                    tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
+                    return tip;
+                } else {
+                    return null;
+                }
             }
-            Calendar cal  = Calendar.getInstance();
-            TimeZone tz = TimeZone.getTimeZone(timeZone);
-            cal.setTimeZone(tz);
-            tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
-            return tip;
+            return null;
         } catch (Exception e) {
             log.error("notice getting error", e);
             return null;
