@@ -30,11 +30,6 @@ public class RecommendMiddlemanApplication {
             log.info(beanName);
         }
 
-        IHealthNoticeService healthNoticeService = ctx.getBean("ab", IHealthNoticeService.class);
-        System.out.println(healthNoticeService.getNoticeService(1088L, "GMT+8"));
-
-
-
         log.info("recommend middleman start!");
     }
 }
