@@ -19,7 +19,7 @@ import com.zhiyun168.model.User;
 public class HealthNoticeService implements IHealthNoticeService {
 
     private Logger log = Logger.getLogger(HealthNoticeService.class);
-    private int typeSize = 3;
+    private int typeSize = 2;
     private ArrayList<String> esIndexList = Lists.newArrayList("recommend", "recommend", "report", "report", "report");
     private ArrayList<String> esTypeList = Lists.newArrayList("sports", "userstepplan", "body", "step", "sleep");
 
@@ -41,7 +41,7 @@ public class HealthNoticeService implements IHealthNoticeService {
                 List <String> candidateList = (List <String> )
                         ((HashMap <String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
                         .get("value")).get("candidates");
-                tip.put("content", candidateList.get(new Random().nextInt(candidateList.size())));
+                tip.put("content", "今天可以玩玩" + candidateList.get(new Random().nextInt(candidateList.size())));
                 tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
                 return tip;
             } else if (index == 1) {
@@ -100,16 +100,17 @@ public class HealthNoticeService implements IHealthNoticeService {
                             Object valueContent = ((HashMap<String, Object>) ((HashMap<String, Object>)
                                     valueContentObject).get("value")).get("value");
                             if (i == 0) {
-                                content += "和你同性别同龄的人的平静体脂率为" + valueContent.toString() + "\n";
+                                Integer bodyFatRate = (Double.valueOf(valueContent.toString()).intValue());
+                                content += "和你同性别同年龄的人的平均体脂率为" + bodyFatRate.toString() + "\n";
                             } else if (i == 1) {
                                 Integer stepNumber = (Double.valueOf(valueContent.toString())).intValue();
-                                content += "和你同性别同年龄的人的平静步数为" + stepNumber.toString() + "步\n";
+                                content += "和你同性别同年龄的人的平均步数为" + stepNumber.toString() + "步\n";
                             } else if (i == 2) {
                                 String [] sleepInfo = valueContent.toString().split("\t");
                                 Integer shallowSleepNumber = (Double.valueOf(sleepInfo[0])).intValue();
-                                content += "和你同性别同年龄的人的平静浅度睡眠时间为" + shallowSleepNumber.toString() + "分钟\n";
+                                content += "和你同性别同年龄的人的平均浅度睡眠时间为" + shallowSleepNumber.toString() + "分钟\n";
                                 Integer deepSleepNumber = (Double.valueOf(sleepInfo[1])).intValue();
-                                content += "和你同性别同年龄的人的平静深度睡眠时间为" + deepSleepNumber.toString() + "分钟\n";
+                                content += "和你同性别同年龄的人的平均深度睡眠时间为" + deepSleepNumber.toString() + "分钟\n";
                             }
                         }
                     }
