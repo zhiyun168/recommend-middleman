@@ -68,7 +68,7 @@ public class HealthNoticeService implements IHealthNoticeService {
                     Integer planHour = (Integer) tmp.get(0);
                     if (planHour.equals(hour)) {
                         Integer hourStep = hourStepTmp.intValue();
-                        content = "建议当前小时内走" + hourStep.toString() + "步，更容易达到今天的目标";
+                        content = "这个小时走" + hourStep.toString() + "步，更易达到目标！";
                     }
                 }
                 if (!Strings.isNullOrEmpty(content)) {
