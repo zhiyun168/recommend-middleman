@@ -36,14 +36,23 @@ public class HealthNoticeService implements IHealthNoticeService {
             String esIndex = esIndexList.get(index);
             String esType = esTypeList.get(index);
             Map tip = new HashMap();
-
             if (index == 0) {
-                List <String> candidateList = (List <String> )
-                        ((HashMap <String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
-                        .get("value")).get("candidates");
-                tip.put("content", "今天可以玩玩" + candidateList.get(new Random().nextInt(candidateList.size())));
-                tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
-                return tip;
+                Calendar cal  = Calendar.getInstance();
+                if (!Strings.isNullOrEmpty(timeZone)) {
+                    TimeZone tz = TimeZone.getTimeZone(timeZone);
+                    cal.setTimeZone(tz);
+                }
+                Integer hour = Integer.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+                if (hour < 16) {
+                    List<String> candidateList = (List<String>)
+                            ((HashMap<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
+                                    .get("value")).get("candidates");
+                    tip.put("content", "今天可以玩玩" + candidateList.get(new Random().nextInt(candidateList.size())));
+                    tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
+                    return tip;
+                } else {
+                    return null;
+                }
             } else if (index == 1) {
                 User userProfile = userService.userProfile(id, null);
                 Integer stepsPlanTmp = userProfile.getExtension().getDaily_steps();
