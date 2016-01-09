@@ -43,13 +43,22 @@ public class HealthNoticeService implements IHealthNoticeService {
                     cal.setTimeZone(tz);
                 }
                 Integer hour = Integer.valueOf(cal.get(Calendar.HOUR_OF_DAY));
-                if (hour < 16) {
-                    List<String> candidateList = (List<String>)
-                            ((HashMap<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
-                                    .get("value")).get("candidates");
-                    tip.put("content", "今天可以玩玩" + candidateList.get(new Random().nextInt(candidateList.size())));
-                    tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
-                    return tip;
+                if (hour < 18) {
+                    Object indexContext = esToMemCacheService.call(esIndex, esType, id.toString());
+                    if (null != indexContext) {
+                        if (!Collections.EMPTY_MAP.equals(((Map<String, Object>) indexContext).get("value"))) {
+                            List<String> candidateList = (List<String>)
+                                    ((Map<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
+                                            .get("value")).get("candidates");
+                            tip.put("content", "今天可以玩玩" + candidateList.get(new Random().nextInt(candidateList.size())));
+                            tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
+                            return tip;
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return null;
+                    }
                 } else {
                     return null;
                 }
@@ -60,32 +69,42 @@ public class HealthNoticeService implements IHealthNoticeService {
                 if (stepsPlanTmp != null) {
                     stepsPlan = Double.valueOf(stepsPlanTmp.intValue());
                 }
-                List planContent = (List <List<?> >) ((HashMap<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
-                        .get("value")).get("stepPlan");
+                Object indexContent = esToMemCacheService.call(esIndex, esType, id.toString());
+                if (null != indexContent) {
+                    if (!Collections.EMPTY_MAP.equals(((Map<String, Object>) indexContent).get("value"))) {
+                        List planContent = (List <List<?> >) ((Map<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
+                                .get("value")).get("stepPlan");
 
-                Calendar cal  = Calendar.getInstance();
-                if (!Strings.isNullOrEmpty(timeZone)) {
-                    TimeZone tz = TimeZone.getTimeZone(timeZone);
-                    cal.setTimeZone(tz);
-                }
-                Integer hour = Integer.valueOf(cal.get(Calendar.HOUR_OF_DAY));
-                String content = "";
-                for (int i = 0; i < planContent.size(); i++) {
-                    List<?> tmp = (List<?>) planContent.get(i);
-                    Double hourStepTmp = stepsPlan * ((Double) tmp.get(1));
+                        Calendar cal  = Calendar.getInstance();
+                        if (!Strings.isNullOrEmpty(timeZone)) {
+                            TimeZone tz = TimeZone.getTimeZone(timeZone);
+                            cal.setTimeZone(tz);
+                        }
+                        Integer hour = Integer.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+                        String content = "";
+                        for (int i = 0; i < planContent.size(); i++) {
+                            List<?> tmp = (List<?>) planContent.get(i);
+                            Double hourStepTmp = stepsPlan * ((Double) tmp.get(1));
 
-                    Integer planHour = (Integer) tmp.get(0);
-                    if (planHour.equals(hour)) {
-                        Integer hourStep = hourStepTmp.intValue();
-                        content = "这个小时走" + hourStep.toString() + "步，更易达到目标！";
+                            Integer planHour = (Integer) tmp.get(0);
+                            if (planHour.equals(hour)) {
+                                Integer hourStep = hourStepTmp.intValue();
+                                content = "这个小时走" + hourStep.toString() + "步，更易达到目标！";
+                            }
+                        }
+                        if (!Strings.isNullOrEmpty(content)) {
+                            tip.put("content", content);
+                            return tip;
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return null;
                     }
-                }
-                if (!Strings.isNullOrEmpty(content)) {
-                    tip.put("content", content);
-                    return tip;
                 } else {
                     return null;
                 }
+
             } else if (index == 2) {
                 User userProfile = userService.userProfile(id, null);
                 String gender = userProfile.getSex();
@@ -105,8 +124,8 @@ public class HealthNoticeService implements IHealthNoticeService {
                     Object valueContentObject = esToMemCacheService.call(esIndex, esType, key);
 
                     if (null != valueContentObject) {
-                        if(!Collections.EMPTY_MAP.equals(((HashMap<String, Object>) valueContentObject).get("value"))) {
-                            Object valueContent = ((HashMap<String, Object>) ((HashMap<String, Object>)
+                        if(!Collections.EMPTY_MAP.equals(((Map<String, Object>) valueContentObject).get("value"))) {
+                            Object valueContent = ((Map<String, Object>) ((Map<String, Object>)
                                     valueContentObject).get("value")).get("value");
                             if (i == 0) {
                                 Integer bodyFatRate = (Double.valueOf(valueContent.toString()).intValue());
