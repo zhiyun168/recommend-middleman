@@ -70,6 +70,11 @@ public class RecUserLoader extends  Loader{
 
     @Override
     public List<String> filter(List<String> rec, Long uid) {
+
+        return  rec;
+
+        /*
+
         //过滤推荐用户
         List<String> filtratedRec = new ArrayList<>();
         for(String recUid: rec)
@@ -80,6 +85,7 @@ public class RecUserLoader extends  Loader{
                 filtratedRec.add(recUid);
         }
         return filtratedRec;
+        */
     }
 
     @Override
