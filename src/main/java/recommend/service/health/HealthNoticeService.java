@@ -50,7 +50,7 @@ public class HealthNoticeService implements IHealthNoticeService {
                             List<String> candidateList = (List<String>)
                                     ((Map<String, Object>) esToMemCacheService.call(esIndex, esType, id.toString())
                                             .get("value")).get("candidates");
-                            tip.put("content", "今天可以玩玩" + candidateList.get(new Random().nextInt(candidateList.size())));
+                            tip.put("content", "今天适合" + candidateList.get(new Random().nextInt(candidateList.size())));
                             tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
                             return tip;
                         } else {
