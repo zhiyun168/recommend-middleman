@@ -52,6 +52,7 @@ public class HealthNoticeService implements IHealthNoticeService {
                                             .get("value")).get("candidates");
                             tip.put("content", "今天适合" + candidateList.get(new Random().nextInt(candidateList.size())));
                             tip.put("end_time", System.currentTimeMillis() + 30 * 60 * 10000);
+                            log.info(tip);
                             return tip;
                         } else {
                             return null;
@@ -94,6 +95,7 @@ public class HealthNoticeService implements IHealthNoticeService {
                         }
                         if (!Strings.isNullOrEmpty(content)) {
                             tip.put("content", content);
+                            log.info(tip);
                             return tip;
                         } else {
                             return null;
