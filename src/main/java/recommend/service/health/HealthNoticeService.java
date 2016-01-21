@@ -32,6 +32,7 @@ public class HealthNoticeService implements IHealthNoticeService {
     public Map getNoticeService(Long id, String timeZone) {
 
         try {
+            log.info(id);
             int index = new Random().nextInt(typeSize);
             String esIndex = esIndexList.get(index);
             String esType = esTypeList.get(index);
