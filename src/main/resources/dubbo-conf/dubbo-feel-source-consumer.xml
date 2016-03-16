@@ -20,8 +20,21 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
- <dubbo:reference id="userService" check="false" interface="com.zhiyun168.service.api.IUserService" mock="return null"/>
- <dubbo:reference id="rec" check="false" interface="recommend.service.api.IUserRecommender" mock="return null"/>
- <dubbo:reference id="goalService" check="false" interface="com.zhiyun168.service.api.goal.IGoalService" mock="return null"/>
+
+    <dubbo:reference id="userService" check="false" interface="com.zhiyun168.service.api.IUserService" mock="return null"/>
+
+    <dubbo:reference id="rec" check="false" interface="recommend.service.api.IUserRecommender" mock="return null"/>
+
+    <dubbo:reference id="goalService" check="false" interface="com.zhiyun168.service.api.goal.IGoalService" mock="return null"/>
+
+    <dubbo:reference id="cardService" check="false" interface="com.zhiyun168.service.api.ICardService" mock="return null"/>
+    <dubbo:reference id="testRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.IJoinedGoalCardWithDetailRecommender" mock="return null" />
+    <dubbo:reference id="testCardWithDetailRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.ICardWithDetailRecommender" mock="return null"/>
+    <dubbo:reference id="testSimilarUserCardWithDetailRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.ISimilarUserCardWithDetailRecommender" mock="return null"/>
+    <dubbo:reference id="testSimilarTagCardWithDetailRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.ISimilarTagCardWithDetailRecommender" mock="return null"/>
+
+    <dubbo:reference id="testGenderGoalWithDetailRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.IGenderGoalWithDetailRecommender" mock="return null"/>
+    <dubbo:reference id="testGoalCommonUserGoalWithDetailRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.IGoalCommonUserGoalWithDetailRecommender" mock="return null"/>
+    <dubbo:reference id="testNearbyCardRecommender" check="false" interface="com.zhiyun168.service.api.recommend.detail.INearbyCardRecommender" mock="return null"/>
 
 </beans>

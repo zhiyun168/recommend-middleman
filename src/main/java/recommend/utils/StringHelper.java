@@ -7,4 +7,5 @@ import com.google.common.base.Joiner;
  */
 public class StringHelper {
     public static Joiner DotJoiner = Joiner.on(":");
+
 }

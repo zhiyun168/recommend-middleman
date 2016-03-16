@@ -7,33 +7,24 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- Support multiple-JVM writing to the same log file -->
-        <prudent>true</prudent>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/Users/ouduobiao/dev/proj/recommend-middleman/logs/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
+    <logger name="recommend.service.logger.RecommendFeedbackLogger" level="info" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
 
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="FEEDBACK" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>rec.feedback.log</file>
+    <appender name="LIKE_OR_DISLIKE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/tmp/feel/like-or-dislike.log</file>
         <encoder>
             <pattern>%msg%n</pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.S3TimeBasedRollingPolicy">
             <!-- Rollover every minute -->
-            <fileNamePattern>rec.feedback.%d{yyyy-MM-dd_HH-mm}.%i.log</fileNamePattern>
+            <fileNamePattern>/tmp/feel/%d{yyyy-MM-dd,aux}/like-or-dislike.%d{HH-mm}.%i.log</fileNamePattern>
             <awsAccessKey>AKIAP7A6NA2HRIN6RCXQ</awsAccessKey>
             <awsSecretKey>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</awsSecretKey>
             <s3Endpoint>s3.cn-north-1.amazonaws.com.cn</s3Endpoint>
-            <s3BucketName>feel.recommender.log</s3BucketName>
-            <s3FolderName>recommend-middleman</s3FolderName>
+            <s3BucketName>feel.like-or-dislike.log.test</s3BucketName>
+            <s3FolderName>feel/%d{yyyy-MM-dd}</s3FolderName>
             <rolloverOnExit>true</rolloverOnExit>
             <shutdownHookType>JVM_SHUTDOWN_HOOK</shutdownHookType>
             <prefixTimestamp>false</prefixTimestamp>
@@ -41,11 +32,12 @@
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
     </appender>
 
-    <logger name="recommend.service.RecommendFeedbackLogger" level="info" additivity="false">
-        <appender-ref ref="STDOUT"/>
+    <logger name="recommend.service.logger.LikeOrDislikeLogger" level="info" additivity="false">
+        <appender-ref ref="LIKE_OR_DISLIKE"/>
     </logger>
 
 

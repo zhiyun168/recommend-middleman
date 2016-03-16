@@ -1,12 +1,12 @@
 package recommend;
 
-import com.zhiyun168.service.api.recommend.IHealthNoticeService;
 import com.zhiyun168.service.api.recommend.detail.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+
 
 
 import java.util.Arrays;
@@ -29,6 +29,11 @@ public class RecommendMiddlemanApplication {
         for (String beanName : beanNames) {
             log.info(beanName);
         }
+
+
+        IJoinedGoalCardWithDetailRecommender joinedGoalCardWithDetailRecommender =
+                ctx.getBean("joinedGoalCardWithDetailRecommender",IJoinedGoalCardWithDetailRecommender.class);
+        System.out.println(joinedGoalCardWithDetailRecommender.getCandidates(1082l,1,10));
 
         log.info("recommend middleman start!");
     }

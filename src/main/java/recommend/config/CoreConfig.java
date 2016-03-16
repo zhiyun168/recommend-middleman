@@ -6,6 +6,9 @@ import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +52,19 @@ public class CoreConfig {
 
         consumer.registerMessageListener(feelListener);
         return consumer;
+    }
+
+
+
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public Server webServer(@Value("${web.port}") int port)
+    {
+        Server server = new Server(port);
+
+        ServletHandler handler = new ServletHandler();
+        server.setHandler(handler);
+        handler.addServletWithMapping(HystrixMetricsStreamServlet.class, "/hystrix.stream");
+        return server;
     }
 
 

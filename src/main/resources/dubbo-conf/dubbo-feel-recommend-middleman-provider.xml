@@ -25,4 +25,23 @@
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IGoalRecommender" ref="goalRecommender" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ICardRecommender" ref="cardRecommender" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IRecommendFeedbackLogger" ref="recommendFeedbackLogger" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.INewUserTagContextRecommender" ref="newUserTagContextRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.INewUserGenderContextRecommender" ref="newUserGenderContextRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IJoinedGoalCardRecommender" ref="joinedGoalCardRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.IRecentlyMostlyUsedTagRecommender" ref="recentlyMostlyUsedTagRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ISimilarUserCardRecommender" ref="similarUserCardRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.ISimilarTagCardRecommender" ref="similarTagCardRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.IJoinedGoalCardWithDetailRecommender" ref="joinedGoalCardWithDetailRecommender" />
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.ICardWithDetailRecommender" ref="cardWithDetailRecommender" />
+
+    <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.ISimilarUserCardWithDetailRecommender" ref="similarUserCardWithDetailRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.logger.ILikeOrDislikeLogger" ref="likeOrDislikeLogger" />
+
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.ISimilarTagCardWithDetailRecommender" ref="similarTagCardWithDetailRecommender" />
+
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.IGenderGoalWithDetailRecommender" ref="genderGoalWithDetailRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.IGoalCommonUserGoalWithDetailRecommender" ref="goalCommonUserGoalWithDetailRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.detail.INearbyCardRecommender" ref="nearbyCardRecommender" />
+
+
 </beans>
