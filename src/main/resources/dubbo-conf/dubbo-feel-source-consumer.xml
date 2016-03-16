@@ -23,5 +23,6 @@
  <dubbo:reference id="userService" check="false" interface="com.zhiyun168.service.api.IUserService" mock="return null"/>
  <dubbo:reference id="rec" check="false" interface="recommend.service.api.IUserRecommender" mock="return null"/>
  <dubbo:reference id="goalService" check="false" interface="com.zhiyun168.service.api.goal.IGoalService" mock="return null"/>
+ <dubbo:reference id="cardService" check="false" interface="com.zhiyun168.service.api.ICardService" mock="return null"/>
 
 </beans>

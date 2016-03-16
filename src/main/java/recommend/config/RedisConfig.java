@@ -24,6 +24,7 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory redisConnectionFactory(@Value("${redis.address}") String address)
     {
+        log.info("缓存数据的redis:{}", address);
         JedisConnectionFactory factory = new JedisConnectionFactory();
         log.info("redis address:" + address);
         String[] host_port = address.split(":");
@@ -41,12 +42,29 @@ public class RedisConfig {
         return new StringRedisTemplate(redisConnectionFactory);
     }
 
-    @Bean
-    RedisMessageListenerContainer container(RedisConnectionFactory redisConnectionFactory,
-                                            MessageListenerAdapter listenerAdapter) {
 
+
+    @Bean
+    public RedisConnectionFactory msgRedisConnectionFactory(@Value("${redis.msg.address}") String address)
+    {
+        log.info("监听消息的redis:{}", address);
+        JedisConnectionFactory factory = new JedisConnectionFactory();
+        log.info("redis address:" + address);
+        String[] host_port = address.split(":");
+        factory.setHostName(host_port[0]);
+        if(host_port.length == 2)
+            factory.setPort(Integer.valueOf(host_port[1]));
+        factory.setUsePool(true);
+        return factory;
+    }
+
+
+
+    @Bean
+    RedisMessageListenerContainer container(RedisConnectionFactory msgRedisConnectionFactory,
+                                            MessageListenerAdapter listenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisConnectionFactory);
+        container.setConnectionFactory(msgRedisConnectionFactory);
         container.addMessageListener(listenerAdapter, new PatternTopic("recommendation"));
         return container;
     }
