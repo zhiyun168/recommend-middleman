@@ -55,6 +55,7 @@ public abstract class PagingRecommender implements ApplicationContextAware {
             else
                 candidate = loadFromStorage(id, page, pageSize);
         }
+        log.info(candidate.toString());
 
         return candidate;
 
