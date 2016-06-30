@@ -4,7 +4,6 @@ import com.zhiyun168.model.recommend.Candidate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.HashOperations;
@@ -23,9 +22,7 @@ public abstract class PagingWithDetailRecommender implements ApplicationContextA
     private static Logger log = LoggerFactory.getLogger(JoinedGoalCardWithDetailRecommender.class);
 
     private WithReasonLoader withReasonLoader;
-    @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    @Autowired
     private RecommendFeedbackLogger recommendFeedbackLogger;
 
     @Override
