@@ -1,7 +1,5 @@
 package recommend;
 
-import com.zhiyun168.service.api.recommend.IHealthNoticeService;
-import com.zhiyun168.service.api.recommend.detail.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
