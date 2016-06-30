@@ -19,8 +19,8 @@ import java.util.*;
 public abstract class PagingRecommender implements ApplicationContextAware {
     private static Logger log = LoggerFactory.getLogger(PagingRecommender.class);
 
-    private Loader loader;
-    private StringRedisTemplate stringRedisTemplate;
+    protected Loader loader;
+    protected StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
