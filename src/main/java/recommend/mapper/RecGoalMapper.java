@@ -11,4 +11,9 @@ public interface RecGoalMapper {
     @Select("select candidate from daka where id=#{id}")
     @ResultType(String.class)
     String getCandidate(@Param("id")String id);
+
+
+    @Select("select candidate from dakajian where id=#{id}")
+    @ResultType(String.class)
+    String getSearchRecCandidate(@Param("id")String id);
 }
