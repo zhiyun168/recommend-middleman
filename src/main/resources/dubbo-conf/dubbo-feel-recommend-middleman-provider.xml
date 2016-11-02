@@ -23,4 +23,6 @@
 
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.IGoalRecommender" ref="goalRecommenderV2" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.ISearchGoalRecommender" ref="searchGoalRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.IBannerGoalRecommender" ref="bannerGoalRecommender" />
+
 </beans>
