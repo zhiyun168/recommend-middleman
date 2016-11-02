@@ -20,7 +20,7 @@ public class SearchGoalRecommender extends PagingRecommender implements ISearchG
 
     private static Logger log = LoggerFactory.getLogger(SearchGoalRecommender.class);
 
-    private static String defaultCandidatesStr = "51203:3289.000000 49284:693.010000 51655:0.000000 46858:122500.460000 51083:3289.000000 51692:748.000000 51697:207.700000 51542:457.800000 51159:0.000000 51096:1293.020000 51357:12283.010000";
+    private static String defaultCandidatesStr = "46858:122500.460000 51357:12283.010000 51203:3289.000000 51083:3289.000000 51096:1293.020000 51692:748.000000 49284:693.010000 51542:457.800000 51697:207.700000 51655:0.000000 51159:0.000000";
 
     private List<String> defaultCandidates;
 
