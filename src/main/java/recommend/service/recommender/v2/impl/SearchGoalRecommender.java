@@ -1,7 +1,6 @@
 package recommend.service.recommender.v2.impl;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+
 import com.zhiyun168.service.api.recommend.v2.ISearchGoalRecommender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
