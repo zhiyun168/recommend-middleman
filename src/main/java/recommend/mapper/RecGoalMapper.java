@@ -20,4 +20,8 @@ public interface RecGoalMapper {
     @Select("select candidate from daka_relative_jian where id=#{id}")
     @ResultType(String.class)
     String getBannerGoalCandidate(@Param("id")String id);
+
+    @Select("select candidate from user_recommend_jian where id=#{id}")
+    @ResultType(String.class)
+    String getFocusUserCandidate(@Param("id")String id);
 }

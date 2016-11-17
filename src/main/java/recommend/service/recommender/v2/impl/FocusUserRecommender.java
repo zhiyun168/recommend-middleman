@@ -2,6 +2,8 @@ package recommend.service.recommender.v2.impl;
 
 import com.zhiyun168.service.api.recommend.v2.IFocusUserRecommender;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import recommend.service.recommender.v2.PagingRecommender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +12,20 @@ import java.util.List;
  * Created by ouduobiao on 2016/11/8.
  */
 @Service
-public class FocusUserRecommender implements IFocusUserRecommender {
-    private static Long start = 4000000L;
+public class FocusUserRecommender extends PagingRecommender implements IFocusUserRecommender {
     @Override
     public List<String> getCandidates(String uid, int page, int pageSize) {
-        List<String> uIds = new ArrayList<>();
-        Long s = (page-1) * pageSize + start;
-        Long end = s + pageSize;
-        for(Long i = s; i < end;++i)
+        List<String> res =  getCandidates_(uid, page, pageSize);
+        if(CollectionUtils.isEmpty(res))
         {
-            uIds.add(i.toString());
+            res = getCandidates_("new_user", page, pageSize);
         }
-        return uIds;
+        return res;
+    }
+
+
+    @Override
+    public String getLoaderName() {
+        return "focusUserRecLoader";
     }
 }
