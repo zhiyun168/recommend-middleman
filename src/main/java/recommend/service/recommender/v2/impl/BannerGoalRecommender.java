@@ -21,6 +21,12 @@ public class BannerGoalRecommender extends PagingRecommender implements IBannerG
         return getCandidates_(id, page, pageSize);
     }
 
+
+    @Override
+    public List<String> getCandidates(String id, String uid, int page, int pageSize) {
+        return getCandidates_(id, page, pageSize);
+    }
+
     @Override
     public String getLoaderName() {
         return "bannerGoalLoader";

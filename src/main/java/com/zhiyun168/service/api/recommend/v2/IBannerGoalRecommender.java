@@ -8,4 +8,6 @@ import java.util.List;
 public interface IBannerGoalRecommender {
 
     List<String> getCandidates(String id, int page, int pageSize);
+    List<String> getCandidates(String id, String uid, int page, int pageSize);
+
 }
