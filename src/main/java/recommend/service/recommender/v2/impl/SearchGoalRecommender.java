@@ -32,6 +32,11 @@ public class SearchGoalRecommender extends PagingRecommender implements ISearchG
     }
 
     @Override
+    public void deleteCandidates(String id, String... recIds) {
+        deleteCandidates_(id, recIds);
+    }
+
+    @Override
     public String getLoaderName() {
         return "searchRecGoalLoader";
     }

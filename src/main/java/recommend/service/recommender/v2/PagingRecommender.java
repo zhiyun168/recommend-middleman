@@ -90,4 +90,9 @@ public abstract class PagingRecommender implements ApplicationContextAware {
         }
     }
 
+
+    public void deleteCandidates_(String id, String... recIds){
+        loader.deleteCandidates(id, recIds);
+    }
+
 }

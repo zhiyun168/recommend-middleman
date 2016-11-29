@@ -23,6 +23,10 @@ public class FocusUserRecommender extends PagingRecommender implements IFocusUse
         return res;
     }
 
+    @Override
+    public void deleteCandidates(String id, String... recIds) {
+        deleteCandidates_(id, recIds);
+    }
 
     @Override
     public String getLoaderName() {

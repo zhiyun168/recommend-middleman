@@ -7,4 +7,5 @@ import java.util.List;
  */
 public interface IFocusUserRecommender {
     List<String> getCandidates(String uid, int page, int pageSize);
+    void deleteCandidates(String id, String... recIds);
 }

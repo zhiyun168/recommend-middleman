@@ -44,13 +44,23 @@ public abstract class Loader extends KeyBuilder implements ApplicationContextAwa
     /**
      * 从id的候选集合删除推荐recId
      * @param id
-     * @param recId
+     * @param recIds
      */
-    public void deleteCandidates(String id, String recId)
+    public void deleteCandidates(String id, String... recIds)
     {
-        String recKey = recKey(id);
-        stringRedisTemplate.opsForZSet().remove(recKey, recId);
+        try {
+            String recKey = recKey(id);
+            stringRedisTemplate.opsForZSet().remove(recKey, recIds);
+        }
+        catch (Exception e)
+        {
+            log.error("从id的候选集合删除推荐recId失败", e);
+        }
+
     }
+
+
+
 
 
     /**
