@@ -1,0 +1,11 @@
+package recommend.model;
+
+option java_package = "recommend.model";
+option java_outer_classname = "RecommendProtos";
+
+message HealthTip {
+    required int64 id = 1;
+    required string tip = 2;
+    required string url = 3;
+}
+
