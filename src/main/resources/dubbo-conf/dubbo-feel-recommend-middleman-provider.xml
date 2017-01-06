@@ -25,5 +25,7 @@
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.ISearchGoalRecommender" ref="searchGoalRecommender" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.IBannerGoalRecommender" ref="bannerGoalRecommender" />
  <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.IFocusUserRecommender" ref="focusUserRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.IHealthTipRecommender" ref="healthTipRecommender" />
+ <dubbo:service timeout="3000" retries="0" interface="com.zhiyun168.service.api.recommend.v2.ILaunchAdRecommender" ref="launchAdRecommender" />
 
 </beans>
