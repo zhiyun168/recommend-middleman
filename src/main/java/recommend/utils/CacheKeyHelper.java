@@ -48,6 +48,8 @@ public class CacheKeyHelper {
     public static final String HEALTH_USER_SPORTS = "feel:health:sports";
     public static final String HEALTH_USER_REPORT = "feel:health:report";
     public static final String HEALTH_USER_PLAN = "feel:health:plan";
+    public static final String LAUNCH_AD_USER = "feel:launch_ad:user";
+    public static final String LAUNCH_AD_DAILY_TOTAL = "feel:launch_ad:daily:total";
 
     /**
      * 加载用户的推荐用户到cache的key

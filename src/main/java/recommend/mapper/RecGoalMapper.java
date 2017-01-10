@@ -24,4 +24,10 @@ public interface RecGoalMapper {
     @Select("select candidate from user_recommend_jian where id=#{id}")
     @ResultType(String.class)
     String getFocusUserCandidate(@Param("id")String id);
+
+
+    @Select("select goal_id_list from banner_personalized where uid=#{uid} and goal_id=#{goal_id} limit 1")
+    @ResultType(String.class)
+    String getPersonalizedBannerCandidate(@Param("uid")Long uid, @Param("goal_id")Long goal_id);
+
 }
