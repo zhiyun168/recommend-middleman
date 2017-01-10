@@ -30,6 +30,7 @@ public class BannerGoalRecommender extends PagingRecommender implements IBannerG
 
     @Override
     public List<String> getCandidates(String id, String uid, int page, int pageSize) {
+        pageSize = 3;
         List<String> candidates =  getCandidates_(id, page, pageSize);
         if(CollectionUtils.isEmpty(candidates))
         {
