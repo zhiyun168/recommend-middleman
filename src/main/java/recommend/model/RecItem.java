@@ -8,6 +8,8 @@ public class RecItem {
     private Double score;
 
 
+    public RecItem() {
+    }
 
     public RecItem(String candidate, Double score) {
         this.candidate = candidate;

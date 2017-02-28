@@ -4,6 +4,9 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 import recommend.model.HealthTipData;
+import recommend.model.RecItem;
+
+import java.util.List;
 
 /**
  * Created by ouduobiao on 2017/1/10.
@@ -19,4 +22,8 @@ public interface CommonRecMapper {
     @Select("select banner_id from home_page_popup where uid=#{uid} and is_del=0 order by update_time desc limit 1")
     @ResultType(HealthTipData.class)
     String getLaunchAdCandidate(@Param("uid")Long uid);
+
+    @Select("select tag as candidate, score from user_tag where uid=#{uid}")
+    @ResultType(RecItem.class)
+    List<RecItem> getUserTag(@Param("uid")String uid);
 }
