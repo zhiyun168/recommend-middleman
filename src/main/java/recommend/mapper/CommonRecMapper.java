@@ -26,4 +26,10 @@ public interface CommonRecMapper {
     @Select("select tag as candidate, score from user_tag where uid=#{uid}")
     @ResultType(RecItem.class)
     List<RecItem> getUserTag(@Param("uid")String uid);
+
+
+    @Select("select candidate from user_banner where id=#{id}")
+    @ResultType(String.class)
+    String getBannerCandidate(@Param("id")String id);
+
 }
